@@ -3,11 +3,16 @@ import Calendar from "@/components/Calender";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
-import { Category, UpdateCategoryModel } from "@/models/Category";
+import {
+  Category,
+  NewCategoryModel,
+  UpdateCategoryModel,
+} from "@/models/Category";
 import {
   GetAllCategoryDatas,
   DeleteCategory,
   UpdateCategory,
+  AddNewCategory,
 } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
@@ -17,21 +22,14 @@ import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 
 const Page = () => {
-  const searchParams = useSearchParams();
-  const selectedId = searchParams.get("id") || 0;
-  const categoryName = searchParams.get("categoryName") || "";
-  const categoryActive = searchParams.get("isActive") || "";
-  const categoryDeleted = searchParams.get("isDeleted") || "";
+  const [inputValue, setInputValue] = useState("");
 
-  const [inputValue, setInputValue] = useState(
-    searchParams.get("categoryName") || "",
-  );
-  const [isActive, setActive] = useState(categoryActive == "true");
-  const [isDeleted, setDeleted] = useState(categoryDeleted == "true");
-
+  const [isActive, setActive] = useState(true);
+  const [isDeleted, setDeleted] = useState(false);
   const [successActive, setSuccessActive] = useState(false);
   const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
@@ -44,25 +42,33 @@ const Page = () => {
     }, 3000);
   }, [errorActive]);
 
-  async function UpdateCategoryFromDatabase() {
-    if (selectedId != null) {
-      var updateCategory: UpdateCategoryModel = {
-        categoryId: Number(selectedId),
-        categoryName: inputValue,
-        isActive: isActive,
-        isDeleted: isDeleted,
-      };
-      setLoading(true);
-      var a = await UpdateCategory(updateCategory);
+  async function AddNewCategoryToDatabase() {
+    var updateCategory: NewCategoryModel = {
+      categoryName: inputValue,
+      isActive: true,
+      isDeleted: false,
+    };
+    setLoading(true);
+    if (
+      updateCategory.categoryName != "" &&
+      updateCategory.categoryName != undefined
+    ) {
+      var a = await AddNewCategory(updateCategory);
       if (a?.code == "100") {
         setSuccessActive(true);
         setErrorActive(false);
       } else {
         setSuccessActive(false);
         setErrorActive(true);
+        setErrorText(
+          "Kategori güncellenirken hata oluştu: " + a.object.resultText,
+        );
       }
-      setLoading(false);
+    } else {
+      setErrorText("Lütfen kategori adı girin.");
+      setErrorActive(true);
     }
+    setLoading(false);
   }
 
   return (
@@ -74,7 +80,7 @@ const Page = () => {
             <div className="flex w-full flex-col gap-5.5 p-6.5">
               <div className="border-b border-stroke py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
-                  {selectedId} Numaralı Kategori'yi Düzenle
+                  Yeni Kategori Ekle
                 </h3>
               </div>
               <div>
@@ -88,7 +94,7 @@ const Page = () => {
                   onChange={(text) => {
                     setInputValue(text.target.value);
                   }}
-                  placeholder={categoryName}
+                  placeholder={"Kategori Adı"}
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
@@ -113,19 +119,17 @@ const Page = () => {
 
               <div className="gap-2.5flex flex justify-end gap-2.5">
                 {successActive && !loading && (
-                  <UpdateSuccess title="Başarıyla güncellendi." />
+                  <UpdateSuccess title="Kategori başarıyla eklendi." />
                 )}
-                {errorActive && !loading && (
-                  <UpdateError title={"Güncelleme sırasında hata."} />
-                )}
+                {errorActive && !loading && <UpdateError title={errorText} />}
                 <button
-                  onClick={UpdateCategoryFromDatabase}
+                  onClick={AddNewCategoryToDatabase}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
                 >
                   <span>
                     <UpdateTick />
                   </span>
-                  Güncelle
+                  Kaydet
                 </button>
                 <button className="inline-flex items-center justify-center gap-2.5 rounded-md bg-danger px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5">
                   <span>

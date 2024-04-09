@@ -3,8 +3,12 @@ import Calendar from "@/components/Calender";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
-import { Category } from "@/models/Category";
-import { GetAllCategoryDatas, DeleteCategory } from "@/services/apiService";
+import { Category, SubCategory } from "@/models/Category";
+import {
+  GetAllCategoryDatas,
+  GetAllSubCategoryDatas,
+  DeleteCategory,
+} from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -13,8 +17,10 @@ import Loader from "@/components/common/Loader";
 
 const CalendarPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [resultCategories, setResultCategories] = useState<Category[]>([]);
-  const [selectedId, setSelectedId] = useState<Category | null>(null);
+  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
+  const [resultCategories, setResultCategories] = useState<SubCategory[]>([]);
+
+  const [selectedId, setSelectedId] = useState<SubCategory | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [resultText, setResultText] = useState<any>();
@@ -27,14 +33,12 @@ const CalendarPage = () => {
   const handleTextChange = (event) => {
     if (event.target.value.trim().length > 0) {
       setResultCategories(
-        categories.filter((a) =>
-          a.categoryName
-            .toLowerCase()
-            .includes(event.target.value.toLowerCase()),
+        subCategories.filter((a) =>
+          a.title.toLowerCase().includes(event.target.value.toLowerCase()),
         ),
       );
     } else {
-      setResultCategories(categories);
+      setResultCategories(subCategories);
     }
   };
   function openModal() {
@@ -66,9 +70,14 @@ const CalendarPage = () => {
     const fetchData = async () => {
       try {
         const _categories = await GetAllCategoryDatas();
-        setLoading(false);
+
         setCategories(_categories.object);
-        setResultCategories(_categories.object);
+        const _subCategories = await GetAllSubCategoryDatas();
+        setSubCategories(_subCategories.object);
+
+        setResultCategories(_subCategories.object);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoading(false);
@@ -96,12 +105,14 @@ const CalendarPage = () => {
           </div>
 
           <CardDataStats
-            title="Toplam Kategori"
-            total={categories.length.toString()}
-            rate={categories.filter((a) => a.isActive).length + " adet aktif"}
+            title="Toplam Alt Kategori"
+            total={subCategories.length.toString()}
+            rate={
+              subCategories.filter((a) => a.isActive).length + " adet aktif"
+            }
             levelUp={false}
-            buttonText="Yeni Kategori Ekle"
-            href="/yeni-kategori"
+            buttonText="Yeni Alt Kategori Ekle"
+            href="/yeni-alt-kategori"
           >
             <TotalDataIcon />
           </CardDataStats>
@@ -110,6 +121,7 @@ const CalendarPage = () => {
             data={resultCategories}
             openModal={openModal}
             selectId={setSelectedId}
+            categories={categories}
           />
 
           <Dialog
@@ -139,7 +151,7 @@ const CalendarPage = () => {
                 </div>
                 <div className="mt-3">
                   <p className="text-gray-500 text-sm">
-                    Kategori Adı : {selectedId?.categoryName}
+                    Kategori Adı : {selectedId?.title}
                   </p>
                 </div>
                 <Dialog.Description
@@ -218,15 +230,17 @@ const CalendarPage = () => {
 export default CalendarPage;
 
 interface CategoriesTableProps {
-  data: Category[];
+  data: SubCategory[];
+  categories: Category[];
   openModal: (args0: boolean) => void;
-  selectId: (args0: Category) => void;
+  selectId: (args0: SubCategory) => void;
 }
 
 const CategoriesTable = ({
   data,
   openModal,
   selectId,
+  categories,
 }: CategoriesTableProps) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -234,8 +248,11 @@ const CategoriesTable = ({
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+              <th className="min-w-[50px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 Kategori ID'si
+              </th>
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                Ana Kategori Adı
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
                 Kategori Adı
@@ -256,9 +273,18 @@ const CategoriesTable = ({
                     {packageItem.id}
                   </h5>
                 </td>
+
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem.categoryName}
+                    {
+                      categories.find((a) => a.id == packageItem.categoryId)
+                        ?.categoryName
+                    }
+                  </p>
+                </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {packageItem.title}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -285,7 +311,7 @@ const CategoriesTable = ({
                     </button>
                     <Link
                       className="hover:text-primary"
-                      href={`/ana-kategori-duzenle?id=${encodeURIComponent(packageItem.id)}&categoryName=${encodeURIComponent(packageItem.categoryName)}&isActive=${encodeURIComponent(packageItem.isActive)}&isDeleted=${encodeURIComponent(packageItem.isDeleted)}`}
+                      href={`/alt-kategori-duzenle?id=${encodeURIComponent(packageItem.id)}&categoryName=${encodeURIComponent(packageItem.id)}&isActive=${encodeURIComponent(packageItem.isActive)}&isDeleted=${encodeURIComponent(packageItem.isDeleted)}`}
                     >
                       <EditIcon />
                     </Link>

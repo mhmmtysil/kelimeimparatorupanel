@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { ReactNode } from "react";
 
 interface CardDataStatsProps {
@@ -7,6 +8,8 @@ interface CardDataStatsProps {
   levelUp?: boolean;
   levelDown?: boolean;
   children: ReactNode;
+  buttonText?: string;
+  href?: string;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
@@ -16,9 +19,37 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   levelUp,
   levelDown,
   children,
+  buttonText,
+  href,
 }) => {
   return (
-    <div className="rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="relative rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
+      {href && (
+        <Link
+          href={href}
+          className="absolute right-4 top-4 inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-10 py-4 text-center font-medium text-white hover:bg-opacity-90 lg:px-3 xl:px-3"
+        >
+          <span>
+            <svg
+              className="fill-current"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20ZM10.75 7C10.75 6.58579 10.4142 6.25 10 6.25C9.5858 6.25 9.25 6.58579 9.25 7V9.25H7C6.58579 9.25 6.25 9.5858 6.25 10C6.25 10.4142 6.58579 10.75 7 10.75H9.25V13C9.25 13.4142 9.5858 13.75 10 13.75C10.4142 13.75 10.75 13.4142 10.75 13V10.75H13C13.4142 10.75 13.75 10.4142 13.75 10C13.75 9.5858 13.4142 9.25 13 9.25H10.75V7Z"
+                fill="white"
+              />
+            </svg>
+          </span>
+          {buttonText}
+        </Link>
+      )}
+
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
         {children}
       </div>
