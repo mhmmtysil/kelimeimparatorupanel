@@ -101,16 +101,7 @@ const DropdownMessage = () => {
               href="/messages"
             >
               <div className="h-12.5 w-12.5 rounded-full">
-                <Image
-                  width={112}
-                  height={112}
-                  src={"/images/user/user-02.png"}
-                  alt="User"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
+                
               </div>
 
               <div>
@@ -158,7 +149,7 @@ const DropdownMessage = () => {
                 <Image
                   width={112}
                   height={112}
-                  src={"/images/user/user-03.png"}
+                  src={"/images/user/user-01.png"}
                   alt="User"
                   style={{
                     width: "auto",
@@ -185,7 +176,7 @@ const DropdownMessage = () => {
                 <Image
                   width={112}
                   height={112}
-                  src={"/images/user/user-04.png"}
+                  src={"/images/user/user-01.png"}
                   alt="User"
                   style={{
                     width: "auto",
@@ -212,7 +203,7 @@ const DropdownMessage = () => {
                 <Image
                   width={112}
                   height={112}
-                  src={"/images/user/user-02.png"}
+                  src={"/images/user/user-01.png"}
                   alt="User"
                   style={{
                     width: "auto",
