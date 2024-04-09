@@ -7,7 +7,7 @@ export type Category = {
 export type SubCategory = {
   id: number;
   title: string;
-  maxLetters: string;
+  maxLetters: number;
   categoryId: number;
   isActive: boolean;
   isDeleted: boolean;
@@ -21,6 +21,26 @@ export type UpdateCategoryModel = {
 
 export type NewCategoryModel = {
   categoryName: string;
+  isActive: boolean;
+  isDeleted: boolean;
+};
+
+export type NewSubCategoryModel = {
+  title: string;
+  maxLetters: number;
+  categoryId: number;
+  isActive: boolean;
+  isDeleted: boolean;
+};
+export type Level = {
+  id: number;
+  isBonus: boolean;
+  letters: string;
+  additionalLetters: string;
+  solvedWords: string;
+  words: string;
+  additionalWords: string;
+  categoryId: number;
   isActive: boolean;
   isDeleted: boolean;
 };

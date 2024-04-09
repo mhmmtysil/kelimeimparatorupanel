@@ -3,12 +3,13 @@ import Calendar from "@/components/Calender";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
-import { Category, SubCategory } from "@/models/Category";
+import { Category, Level, SubCategory } from "@/models/Category";
 import {
   GetAllCategoryDatas,
-  GetAllSubCategoryDatas,
   DeleteCategory,
-  DeleteSubCategory,
+  GetAllLevels,
+  GetAllSubCategoryDatas,
+  DeleteLevel,
 } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
@@ -17,44 +18,32 @@ import CardDataStats from "@/components/CardDataStats";
 import Loader from "@/components/common/Loader";
 
 const CalendarPage = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [mainCategories, setMainCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
-  const [resultCategories, setResultCategories] = useState<SubCategory[]>([]);
+  const [categories, setCategories] = useState<Level[]>([]);
+  const [resultCategories, setResultCategories] = useState<Level[]>([]);
 
-  const [selectedId, setSelectedId] = useState<SubCategory | null>(null);
+  const [selectedId, setSelectedId] = useState<Category | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [resultText, setResultText] = useState<any>();
 
   const [loading, setLoading] = useState(true);
+
+  const searchParams = useSearchParams();
+
   // Functions
 
-  const fetchData = async () => {
-    try {
-      const _categories = await GetAllCategoryDatas();
-
-      setCategories(_categories.object);
-      const _subCategories = await GetAllSubCategoryDatas();
-      setSubCategories(_subCategories.object);
-
-      setResultCategories(_subCategories.object);
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      setLoading(false);
-    }
-  };
-
+  //@ts-ignore
   const handleTextChange = (event) => {
     if (event.target.value.trim().length > 0) {
       setResultCategories(
-        subCategories.filter((a) =>
-          a.title.toLowerCase().includes(event.target.value.toLowerCase()),
+        categories.filter((a) =>
+          a.words.toLowerCase().includes(event.target.value.toLowerCase()),
         ),
       );
     } else {
-      setResultCategories(subCategories);
+      setResultCategories(categories);
     }
   };
   function openModal() {
@@ -72,14 +61,9 @@ const CalendarPage = () => {
     setResultModal(false);
   }
 
-  async function deleteCategoryFromServer(deleteId: number) {
+  async function deleteLevelFromServer(deleteId: number) {
     if (deleteId != null) {
-      const deleteResult = await DeleteSubCategory(deleteId);
-      // if(deleteResult.)
-      if (deleteResult.code == "100") {
-        fetchData();
-      }
-
+      const deleteResult = await DeleteLevel(deleteId);
       setResultText(deleteResult);
       openResultodal();
     }
@@ -88,6 +72,22 @@ const CalendarPage = () => {
   // Hooks
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const _categories = await GetAllLevels();
+        const _subCategories = await GetAllSubCategoryDatas();
+        const _mainCategories = await GetAllCategoryDatas();
+        setSubCategories(_subCategories.object);
+        setCategories(_categories.object);
+        setMainCategories(_mainCategories.object);
+        setResultCategories(_categories.object);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, []);
 
@@ -101,7 +101,7 @@ const CalendarPage = () => {
             <div className="w-full rounded-md border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <input
                 type="text"
-                placeholder="Kategori ismine göre arayın..."
+                placeholder="Ana Kategori Alt Kategori veya Harflere göre arayın.."
                 className="w-full bg-transparent px-4 py-4 pl-4 pr-4  font-medium focus:outline-none xl:w-125"
                 onChange={handleTextChange}
               />
@@ -109,14 +109,12 @@ const CalendarPage = () => {
           </div>
 
           <CardDataStats
-            title="Toplam Alt Kategori"
-            total={subCategories.length.toString()}
-            rate={
-              subCategories.filter((a) => a.isActive).length + " adet aktif"
-            }
+            title="Toplam Seviye"
+            total={categories.length.toString()}
+            rate={categories.filter((a) => a.isActive).length + " adet aktif"}
             levelUp={false}
-            buttonText="Yeni Alt Kategori Ekle"
-            href="/yeni-alt-kategori"
+            buttonText="Yeni Bölüm Ekle"
+            href="/yeni-kategori"
           >
             <TotalDataIcon />
           </CardDataStats>
@@ -125,7 +123,8 @@ const CalendarPage = () => {
             data={resultCategories}
             openModal={openModal}
             selectId={setSelectedId}
-            categories={categories}
+            subCategories={subCategories}
+            mainCategories={mainCategories}
           />
 
           <Dialog
@@ -155,7 +154,7 @@ const CalendarPage = () => {
                 </div>
                 <div className="mt-3">
                   <p className="text-gray-500 text-sm">
-                    Kategori Adı : {selectedId?.title}
+                    Kategori Adı : {selectedId?.categoryName}
                   </p>
                 </div>
                 <Dialog.Description
@@ -171,7 +170,7 @@ const CalendarPage = () => {
                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     onClick={() => {
                       if (selectedId?.id != null)
-                        deleteCategoryFromServer(selectedId?.id);
+                        deleteLevelFromServer(selectedId?.id);
                       setIsModalOpen(false);
                     }}
                   >
@@ -234,17 +233,19 @@ const CalendarPage = () => {
 export default CalendarPage;
 
 interface CategoriesTableProps {
-  data: SubCategory[];
-  categories: Category[];
+  mainCategories: Category[];
+  subCategories: SubCategory[];
+  data: Level[];
   openModal: (args0: boolean) => void;
-  selectId: (args0: SubCategory) => void;
+  selectId: (args0: Level) => void;
 }
 
 const CategoriesTable = ({
   data,
   openModal,
   selectId,
-  categories,
+  subCategories,
+  mainCategories,
 }: CategoriesTableProps) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -252,17 +253,17 @@ const CategoriesTable = ({
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[50px] max-w-[100px]  px-4 py-4 font-medium text-black dark:text-white">
+              <th className="min-w-[50px] max-w-[100px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
                 ID
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Ana Kategori Adı
+                Harfler
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Kategori Adı
+                Ana Kategori
               </th>
-              <th className="min-w-[150px] px-4 py-4 text-center font-medium text-black dark:text-white">
-                Maksimum Harf
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+                Alt Kategori
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Durum
@@ -280,24 +281,31 @@ const CategoriesTable = ({
                     {packageItem.id}
                   </h5>
                 </td>
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {Array.from(packageItem.letters).join(",")}
+                  </p>
+                </td>
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {
-                      categories.find((a) => a.id == packageItem.categoryId)
-                        ?.categoryName
+                      mainCategories.find(
+                        (a) =>
+                          a.id ==
+                          subCategories.find(
+                            (b) => b.id == packageItem.categoryId,
+                          )?.categoryId,
+                      )?.categoryName
                     }
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {packageItem.title}
-                  </p>
-                </td>
-
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-center text-center text-black dark:text-white">
-                    {packageItem.maxLetters}
+                    {
+                      subCategories.find((a) => a.id == packageItem.categoryId)
+                        ?.title
+                    }
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
@@ -324,7 +332,7 @@ const CategoriesTable = ({
                     </button>
                     <Link
                       className="hover:text-primary"
-                      href={`/alt-kategori-duzenle?id=${encodeURIComponent(packageItem.id)}&categoryName=${encodeURIComponent(packageItem.title)}&mainCategoryId=${encodeURIComponent(packageItem.categoryId)}&maxLetters=${encodeURIComponent(packageItem.maxLetters)}&isActive=${encodeURIComponent(packageItem.isActive)}&isDeleted=${encodeURIComponent(packageItem.isDeleted)}`}
+                      href={`/seviye-duzenle?id=${encodeURIComponent(packageItem.id)}&isBonus=${encodeURIComponent(packageItem.isBonus)}&letters=${encodeURIComponent(packageItem.letters)}&additionalLetters=${encodeURIComponent(packageItem.additionalLetters)}&solvedWords=${encodeURIComponent(packageItem.solvedWords)}&words=${encodeURIComponent(packageItem.words)}&additionalWords=${encodeURIComponent(packageItem.additionalWords)}&isActive=${encodeURIComponent(packageItem.isActive)}&isDeleted=${encodeURIComponent(packageItem.isDeleted)}&categoryId=${encodeURIComponent(packageItem.categoryId)}`}
                     >
                       <EditIcon />
                     </Link>

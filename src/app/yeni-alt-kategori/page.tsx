@@ -1,28 +1,19 @@
 "use client";
-import Calendar from "@/components/Calender";
-import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { SetStateAction, useEffect, useState } from "react";
-import {
-  Category,
-  NewCategoryModel,
-  UpdateCategoryModel,
-} from "@/models/Category";
-import {
-  GetAllCategoryDatas,
-  DeleteCategory,
-  UpdateCategory,
-  AddNewCategory,
-} from "@/services/apiService";
-import { Dialog } from "@headlessui/react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Category, NewSubCategoryModel, SubCategory } from "@/models/Category";
+import { GetAllCategoryDatas, AddNewSubCategory } from "@/services/apiService";
 import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
+import Link from "next/link";
 
 const Page = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [letterCount, setLetterCount] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<number>(0);
+  const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const [isActive, setActive] = useState(true);
   const [isDeleted, setDeleted] = useState(false);
@@ -42,18 +33,33 @@ const Page = () => {
     }, 3000);
   }, [errorActive]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const _categories = await GetAllCategoryDatas();
+
+        setCategories(_categories.object);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   async function AddNewCategoryToDatabase() {
-    var updateCategory: NewCategoryModel = {
-      categoryName: inputValue,
+    var updateCategory: NewSubCategoryModel = {
+      title: inputValue,
+      maxLetters: letterCount,
       isActive: true,
       isDeleted: false,
+      categoryId: selectedOption,
     };
     setLoading(true);
-    if (
-      updateCategory.categoryName != "" &&
-      updateCategory.categoryName != undefined
-    ) {
-      var a = await AddNewCategory(updateCategory);
+    if (updateCategory.categoryId != null || updateCategory.categoryId != 0) {
+      var a = await AddNewSubCategory(updateCategory);
       if (a?.code == "100") {
         setSuccessActive(true);
         setErrorActive(false);
@@ -61,15 +67,19 @@ const Page = () => {
         setSuccessActive(false);
         setErrorActive(true);
         setErrorText(
-          "Kategori güncellenirken hata oluştu: " + a.object.resultText,
+          "Alt Kategori eklenirken hata oluştu: " + a.object.resultText,
         );
       }
     } else {
-      setErrorText("Lütfen kategori adı girin.");
+      setErrorText("Lütfen alt kategori adı girin.");
       setErrorActive(true);
     }
     setLoading(false);
   }
+
+  const changeTextColor = () => {
+    setIsOptionSelected(true);
+  };
 
   return (
     <DefaultLayout>
@@ -80,12 +90,12 @@ const Page = () => {
             <div className="flex w-full flex-col gap-5.5 p-6.5">
               <div className="border-b border-stroke py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
-                  Yeni Kategori Ekle
+                  Yeni Alt Kategori Ekle
                 </h3>
               </div>
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Kategori Adı:{" "}
+                  Alt Kategori Adı:
                   <span className="text-meta-1">*Zorunlu alan</span>
                 </label>
                 <input
@@ -94,17 +104,134 @@ const Page = () => {
                   onChange={(text) => {
                     setInputValue(text.target.value);
                   }}
-                  placeholder={"Kategori Adı"}
+                  placeholder={"Alt Kategori Adı"}
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
               </div>
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Aktif Mi?{" "}
+                  Maksimum Harf sayısı:
+                  <span className="text-meta-1">*Zorunlu alan</span>
+                </label>
+                <input
+                  type="text"
+                  value={letterCount}
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+                    const numericValue = inputValue.replace(/\D/g, ""); // Sadece sayıları al
+                    setLetterCount(Number(numericValue));
+                  }}
+                  placeholder={"0"}
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+              </div>
+
+              <div className="relative z-20 bg-white dark:bg-form-input">
+                <span className="absolute left-4 top-1/2 z-30 -translate-y-1/2">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path
+                        d="M17 10H19C21 10 22 9 22 7V5C22 3 21 2 19 2H17C15 2 14 3 14 5V7C14 9 15 10 17 10Z"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M5 22H7C9 22 10 21 10 19V17C10 15 9 14 7 14H5C3 14 2 15 2 17V19C2 21 3 22 5 22Z"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M6 10C8.20914 10 10 8.20914 10 6C10 3.79086 8.20914 2 6 2C3.79086 2 2 3.79086 2 6C2 8.20914 3.79086 10 6 10Z"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M18 22C20.2091 22 22 20.2091 22 18C22 15.7909 20.2091 14 18 14C15.7909 14 14 15.7909 14 18C14 20.2091 15.7909 22 18 22Z"
+                        stroke="#292D32"
+                        stroke-width="1.5"
+                        stroke-miterlimit="10"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
+
+                <select
+                  value={selectedOption}
+                  onChange={(e) => {
+                    setSelectedOption(Number(e.target.value));
+                    changeTextColor();
+                  }}
+                  className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent px-12 py-3 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
+                    isOptionSelected ? "text-black dark:text-white" : ""
+                  }`}
+                >
+                  <option
+                    value={0}
+                    disabled
+                    className="text-body dark:text-bodydark"
+                  >
+                    Kategori Seçiniz.
+                  </option>
+                  {categories.map((category, index) => (
+                    <option
+                      key={index}
+                      value={category.id}
+                      className="text-body dark:text-bodydark"
+                    >
+                      {category.categoryName}
+                    </option>
+                  ))}
+                </select>
+
+                <span className="absolute right-4 top-1/2 z-10 -translate-y-1/2">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g opacity="0.8">
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                        fill="#637381"
+                      ></path>
+                    </g>
+                  </svg>
+                </span>
+              </div>
+              <div>
+                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                  Aktif Mi?
                   <span className="text-meta-1">
-                    *Kapalı olursa bu kategorideki{" "}
+                    *Kapalı olursa bu kategorideki
                     <span className="text-danger underline">Tüm</span> seviyeler
-                    pasif olur{" "}
+                    pasif olur
                   </span>
                 </label>
                 <Switch isActive={isActive} setActive={setActive} />
@@ -133,7 +260,7 @@ const Page = () => {
                 </button>
                 <Link
                   passHref
-                  href={"/ana-kategoriler"}
+                  href={"/alt-kategoriler"}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-danger px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
                 >
                   <span>

@@ -127,3 +127,132 @@ export async function GetAllSubCategoryDatas() {
     throw new Error(ERROR_MESSAGE);
   }
 }
+
+export async function AddNewSubCategory(newSubCategory) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}SubCategory/AddNewSubCategory`,
+      {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newSubCategory),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(ERROR_MESSAGE);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(ERROR_MESSAGE);
+  }
+}
+export async function DeleteSubCategory(categoryId) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}SubCategory/DeleteSubCategory`,
+      {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ categoryId: categoryId }),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(ERROR_MESSAGE);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(ERROR_MESSAGE);
+  }
+}
+
+export async function UpdateSubCategory(updateCategory) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}SubCategory/UpdateSubCategory`,
+      {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateCategory),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(ERROR_MESSAGE);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(ERROR_MESSAGE);
+  }
+}
+export async function GetAllLevels() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}Level/GetAllLevels`,
+      {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(ERROR_MESSAGE);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(ERROR_MESSAGE);
+  }
+}
+
+
+export async function DeleteLevel(categoryId) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}Level/DeleteLevel`,
+      {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ categoryId: categoryId }),
+      },
+    );
+
+    if (!res.ok) {
+      throw new Error(ERROR_MESSAGE);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(ERROR_MESSAGE);
+  }
+}
+
