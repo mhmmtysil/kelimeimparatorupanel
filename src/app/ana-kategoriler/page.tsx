@@ -10,8 +10,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CardDataStats from "@/components/CardDataStats";
 import Loader from "@/components/common/Loader";
+import { useSession } from "next-auth/react";
 
 const CalendarPage = () => {
+  const { data: session } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
   const [resultCategories, setResultCategories] = useState<Category[]>([]);
   const [selectedId, setSelectedId] = useState<Category | null>(null);
@@ -65,7 +67,7 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllCategoryDatas();
+        const _categories = await GetAllCategoryDatas(session?.user.accessToken);
         setLoading(false);
         setCategories(_categories.object);
         setResultCategories(_categories.object);

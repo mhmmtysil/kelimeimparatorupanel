@@ -4,11 +4,7 @@ import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
 import { Category, UpdateCategoryModel } from "@/models/Category";
-import {
-  GetAllCategoryDatas,
-  DeleteCategory,
-  UpdateCategory,
-} from "@/services/apiService";
+import { UpdateCategory } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -79,8 +75,7 @@ const Page = () => {
               </div>
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Kategori Adı:{" "}
-                  <span className="">*Zorunlu alan</span>
+                  Kategori Adı: <span className="">*Zorunlu alan</span>
                 </label>
                 <input
                   type="text"

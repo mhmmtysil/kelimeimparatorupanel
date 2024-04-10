@@ -5,8 +5,12 @@ import Header from "@/components/Header";
 
 export default function DefaultLayout({
   children,
+  isSidebarOpen = true,
+  isHeaderOpen = true,
 }: {
   children: React.ReactNode;
+  isSidebarOpen?: boolean;
+  isHeaderOpen?: boolean;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -14,13 +18,17 @@ export default function DefaultLayout({
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {isSidebarOpen && (
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        )}
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           {/* <!-- ===== Header Start ===== --> */}
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          {isHeaderOpen && (
+            <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          )}
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}

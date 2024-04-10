@@ -4,12 +4,7 @@ import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
 import { Category, SubCategory, UpdateCategoryModel } from "@/models/Category";
-import {
-  GetAllCategoryDatas,
-  DeleteCategory,
-  UpdateCategory,
-  GetAllSubCategoryDatas,
-} from "@/services/apiService";
+import { GetAllSubCategoryDatas } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";

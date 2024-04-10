@@ -6,10 +6,6 @@ import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
-import MapOne from "../Maps/MapOne";
-import CategoriesTable from "../CategoriesTable";
-import { GetAllCategoryDatas } from "@/services/apiService";
-import { Category } from "../../models/Category";
 
 const ECommerce: React.FC = () => {
   return (

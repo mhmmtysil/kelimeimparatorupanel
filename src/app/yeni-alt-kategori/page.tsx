@@ -7,8 +7,10 @@ import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
+  const { data: session } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [letterCount, setLetterCount] = useState(0);
@@ -36,7 +38,9 @@ const Page = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllCategoryDatas();
+        const _categories = await GetAllCategoryDatas(
+          session?.user?.accessToken,
+        );
 
         setCategories(_categories.object);
         setLoading(false);

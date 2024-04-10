@@ -15,8 +15,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CardDataStats from "@/components/CardDataStats";
 import Loader from "@/components/common/Loader";
+import { useSession } from "next-auth/react";
 
 const CalendarPage = () => {
+  const { data: session } = useSession();
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [resultCategories, setResultCategories] = useState<SubCategory[]>([]);
@@ -31,7 +33,7 @@ const CalendarPage = () => {
 
   const fetchData = async () => {
     try {
-      const _categories = await GetAllCategoryDatas();
+      const _categories = await GetAllCategoryDatas(session?.user.accessToken);
 
       setCategories(_categories.object);
       const _subCategories = await GetAllSubCategoryDatas();

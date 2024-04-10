@@ -16,9 +16,11 @@ import { useSearchParams } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
   const selectedId = searchParams.get("id") || 0;
   const categoryName = searchParams.get("categoryName") || "";
   const categoryActive = searchParams.get("isActive") || "";
@@ -56,7 +58,7 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const _categories = await GetAllCategoryDatas();
+      const _categories = await GetAllCategoryDatas(session?.user.accessToken);
 
       setCategories(_categories.object);
       setLoading(false);

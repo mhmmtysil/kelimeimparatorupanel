@@ -9,9 +9,6 @@ import {
   UpdateCategoryModel,
 } from "@/models/Category";
 import {
-  GetAllCategoryDatas,
-  DeleteCategory,
-  UpdateCategory,
   AddNewCategory,
 } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";

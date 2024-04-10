@@ -1,6 +1,35 @@
 const ERROR_MESSAGE = "Api request failed.";
 
-export async function GetAllCategoryDatas() {
+export async function Login(user) {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}Auth/Login`, {
+      method: "POST",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        password: user.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(ERROR_MESSAGE);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(ERROR_MESSAGE);
+  }
+}
+
+export async function GetAllCategoryDatas(accessToken) {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}Category/GetAllCategoryDatas`,
@@ -8,6 +37,7 @@ export async function GetAllCategoryDatas() {
         method: "POST",
         cache: "no-cache",
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
       },
@@ -229,7 +259,6 @@ export async function GetAllLevels() {
   }
 }
 
-
 export async function DeleteLevel(categoryId) {
   try {
     const res = await fetch(
@@ -255,4 +284,3 @@ export async function DeleteLevel(categoryId) {
     throw new Error(ERROR_MESSAGE);
   }
 }
-
