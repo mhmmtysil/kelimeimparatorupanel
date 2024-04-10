@@ -3,8 +3,13 @@ import Calendar from "@/components/Calender";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
-import { Category, SubCategory, UpdateCategoryModel } from "@/models/Category";
-import { GetAllSubCategoryDatas } from "@/services/apiService";
+import {
+  Category,
+  Level,
+  SubCategory,
+  UpdateCategoryModel,
+} from "@/models/Category";
+import { GetAllSubCategoryDatas, UpdateLevel } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -74,27 +79,6 @@ const Page = () => {
     fetchData();
   }, []);
 
-  async function UpdateCategoryFromDatabase() {
-    // if (selectedOption != null) {
-    //   var updateCategory: UpdateCategoryModel = {
-    //     categoryId: Number(selectedOption),
-    //     categoryName: inputValue,
-    //     isActive: isActive,
-    //     isDeleted: isDeleted,
-    //   };
-    //   setLoading(true);
-    //   var a = await UpdateCategory(updateCategory);
-    //   if (a?.code == "100") {
-    //     setSuccessActive(true);
-    //     setErrorActive(false);
-    //   } else {
-    //     setSuccessActive(false);
-    //     setErrorActive(true);
-    //   }
-    //   setLoading(false);
-    // }
-  }
-
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
@@ -154,6 +138,37 @@ const Page = () => {
     const updatedItems = itemsSolved.filter((_, i) => i !== index);
     setItemsSolved(updatedItems);
   };
+
+  async function UpdateCategoryFromDatabase() {
+    var level: Level = {
+      id: Number(_selectedId),
+      isBonus: isBonus,
+      letters: itemsLetters.filter((a) => a.trim().length > 0).join(""),
+      additionalLetters: itemsAdditionalLetters
+        .filter((item) => item.trim().length > 0)
+        .map((item) => item.trim().charAt(0))
+        .join(","),
+      solvedWords: itemsSolved.filter((a) => a.trim().length > 0).join(","),
+      words: items.join(","),
+      additionalWords: itemsExtra.filter((a) => a.trim().length > 0).join(","),
+      categoryId: selectedOption,
+      isActive: isActive,
+      isDeleted: isDeleted,
+    };
+    console.log(level);
+
+    var a = await UpdateLevel(level, session?.user.accessToken);
+    if (a?.code == "100") {
+      setSuccessActive(true);
+      setErrorActive(false);
+    } else {
+      setSuccessActive(false);
+      setErrorActive(true);
+    }
+    console.log(a);
+    
+    setLoading(false);
+  }
   return (
     <DefaultLayout>
       {loading && <Loader />}
@@ -314,6 +329,7 @@ const Page = () => {
                     <input
                       type="text"
                       value={item}
+                      maxLength={1}
                       onChange={(e) => {
                         const updatedItems = [...itemsLetters];
                         updatedItems[index] = e.target.value;
@@ -468,7 +484,7 @@ const Page = () => {
                       type="text"
                       value={item}
                       onChange={(e) => {
-                        const updatedItems = [...items];
+                        const updatedItems = [...itemsExtra];
                         updatedItems[index] = e.target.value;
                         setItemsExtra(updatedItems);
                       }}
@@ -545,6 +561,7 @@ const Page = () => {
                     <input
                       type="text"
                       value={item}
+                      maxLength={1}
                       onChange={(e) => {
                         const updatedItems = [...itemsAdditionalLetters];
                         updatedItems[index] = e.target.value;
@@ -624,7 +641,7 @@ const Page = () => {
                       type="text"
                       value={item}
                       onChange={(e) => {
-                        const updatedItems = [...items];
+                        const updatedItems = [...itemsSolved];
                         updatedItems[index] = e.target.value;
                         setItemsSolved(updatedItems);
                       }}
