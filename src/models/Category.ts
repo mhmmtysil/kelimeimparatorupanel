@@ -44,3 +44,14 @@ export type Level = {
   isActive: boolean;
   isDeleted: boolean;
 };
+export type NewLevel = {
+  isBonus: boolean;
+  letters: string;
+  additionalLetters: string;
+  solvedWords: string;
+  words: string;
+  additionalWords: string;
+  categoryId: number;
+  isActive: boolean;
+  isDeleted: boolean;
+};

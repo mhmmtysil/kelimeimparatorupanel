@@ -116,3 +116,7 @@ export async function DeleteLevel(categoryId, accessToken) {
 export async function UpdateLevel(level, accessToken) {
   return await baseRequesAuth("Level/UpdateLevel", accessToken, level);
 }
+
+export async function AddNewLevel(level, accessToken) {
+  return await baseRequesAuth("Level/AddNewLevel", accessToken, level);
+}

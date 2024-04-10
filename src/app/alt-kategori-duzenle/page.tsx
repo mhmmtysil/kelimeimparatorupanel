@@ -41,12 +41,12 @@ const Page = () => {
   useEffect(() => {
     setTimeout(() => {
       setSuccessActive(false);
-    }, 3000);
+    }, 5000);
   }, [successActive]);
   useEffect(() => {
     setTimeout(() => {
       setErrorActive(false);
-    }, 3000);
+    }, 5000);
   }, [errorActive]);
 
   const fetchData = async () => {

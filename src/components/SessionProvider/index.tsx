@@ -3,8 +3,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Loader from "../common/Loader";
 
-import Lottie from "lottie-react";
-import astronaut from "../../../public/lottie/error.json";
 import SignIn from "../Login";
 
 function Session({

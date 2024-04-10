@@ -14,15 +14,11 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState("");
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    console.log(email, password);
-
     const res = await signIn("credentials", {
       email: email,
       password: password,
       redirect: false,
     });
-    debugger;
   };
   return (
     <DefaultLayout isSidebarOpen={false} isHeaderOpen={false}>

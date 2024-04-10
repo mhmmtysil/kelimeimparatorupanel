@@ -1,53 +1,31 @@
 "use client";
-import Calendar from "@/components/Calender";
-import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Level, NewLevel, SubCategory } from "@/models/Category";
 import {
-  Category,
-  Level,
-  SubCategory,
-  UpdateCategoryModel,
-} from "@/models/Category";
-import { GetAllSubCategoryDatas, UpdateLevel } from "@/services/apiService";
-import { Dialog } from "@headlessui/react";
+  AddNewLevel,
+  GetAllSubCategoryDatas,
+  UpdateLevel,
+} from "@/services/apiService";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
 
-interface Props {
-  initialList: string;
-}
-
 const Page = () => {
   const { data: session } = useSession();
   const [categories, setCategories] = useState<SubCategory[]>([]);
-  const searchParams = useSearchParams();
-  const _selectedId = searchParams.get("id") || 0;
-  const _isBonus = searchParams.get("isBonus") || false;
-  const _letters = searchParams.get("letters") || "";
-  const _additionalLetters = searchParams.get("additionalLetters") || "";
-  const _solvedWords = searchParams.get("solvedWords") || "";
-  const _words = searchParams.get("words") || "";
-  const _additionalWords = searchParams.get("additionalWords") || "";
-  const _isActive = searchParams.get("isActive") || false;
-  const _isDeleted = searchParams.get("isDeleted") || false;
-  const _categoryId = searchParams.get("categoryId") || "";
 
-  const [isActive, setActive] = useState(_isActive == "true");
-  const [isDeleted, setDeleted] = useState(_isDeleted == "true");
-  const [isBonus, setBonus] = useState(_isBonus == "true");
+  const [isActive, setActive] = useState(true);
+  const [isDeleted, setDeleted] = useState(false);
+  const [isBonus, setBonus] = useState(false);
 
   const [successActive, setSuccessActive] = useState(false);
   const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [selectedOption, setSelectedOption] = useState<number>(
-    Number(_categoryId),
-  );
+  const [selectedOption, setSelectedOption] = useState<number>(0);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   useEffect(() => {
@@ -83,20 +61,13 @@ const Page = () => {
     setIsOptionSelected(true);
   };
 
-  const [itemsLetters, setItemsLetters] = useState(_letters.split(""));
+  const [itemsLetters, setItemsLetters] = useState([""]);
 
-  const [itemsAdditionalLetters, setItemsAdditionalLetters] = useState(
-    _additionalLetters.split(""),
-  );
-  const [items, setItems] = useState(
-    _words.split(",").filter((word) => word.trim() !== ""),
-  );
-  const [itemsExtra, setItemsExtra] = useState(
-    _additionalWords.split(",").filter((word) => word.trim() !== ""),
-  );
-  const [itemsSolved, setItemsSolved] = useState(
-    _solvedWords.split(",").filter((word) => word.trim() !== ""),
-  );
+  const [itemsAdditionalLetters, setItemsAdditionalLetters] = useState([""]);
+  const [items, setItems] = useState([""]);
+  const [itemsExtra, setItemsExtra] = useState([""]);
+  const [itemsSolved, setItemsSolved] = useState([""]);
+  const [errorText, setErrorText] = useState([""]);
 
   const addInput = () => {
     setItems([...items, ""]);
@@ -140,8 +111,7 @@ const Page = () => {
   };
 
   async function UpdateCategoryFromDatabase() {
-    var level: Level = {
-      id: Number(_selectedId),
+    var level: NewLevel = {
       isBonus: isBonus,
       letters: itemsLetters.filter((a) => a.trim().length > 0).join(""),
       additionalLetters: itemsAdditionalLetters
@@ -155,14 +125,16 @@ const Page = () => {
       isActive: isActive,
       isDeleted: isDeleted,
     };
-    var a = await UpdateLevel(level, session?.user.accessToken);
+    var a = await AddNewLevel(level, session?.user.accessToken);
     if (a?.code == "100") {
       setSuccessActive(true);
       setErrorActive(false);
     } else {
       setSuccessActive(false);
       setErrorActive(true);
+      setErrorText(a?.object.resultText);
     }
+
     setLoading(false);
   }
   return (
@@ -174,7 +146,7 @@ const Page = () => {
             <div className="flex w-full flex-col gap-5.5 p-6.5">
               <div className="border-b border-stroke py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
-                  {_selectedId} numaralı Id'ye ait Bölümü Düzenle
+                  Yeni Bölüm Ekle
                 </h3>
               </div>
               <div>
@@ -696,10 +668,10 @@ const Page = () => {
               </div>
               <div className="gap-2.5flex flex justify-end gap-2.5">
                 {successActive && !loading && (
-                  <UpdateSuccess title="Başarıyla güncellendi." />
+                  <UpdateSuccess title="Başarıyla eklendi." />
                 )}
                 {errorActive && !loading && (
-                  <UpdateError title={"Güncelleme sırasında hata."} />
+                  <UpdateError title={"Hata. " + errorText} />
                 )}
                 <button
                   onClick={UpdateCategoryFromDatabase}
@@ -708,11 +680,11 @@ const Page = () => {
                   <span>
                     <UpdateTick />
                   </span>
-                  Güncelle
+                  Ekle
                 </button>
                 <Link
                   passHref
-                  href={"/ana-kategoriler"}
+                  href={"/"}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-danger px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
                 >
                   <span>

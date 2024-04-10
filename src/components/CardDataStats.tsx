@@ -10,6 +10,7 @@ interface CardDataStatsProps {
   children: ReactNode;
   buttonText?: string;
   href?: string;
+  onClick?(event: Event): void;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
@@ -21,6 +22,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   children,
   buttonText,
   href,
+  onClick,
 }) => {
   return (
     <div className="relative rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
