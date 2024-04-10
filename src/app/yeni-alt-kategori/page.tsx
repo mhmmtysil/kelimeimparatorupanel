@@ -8,6 +8,7 @@ import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const { data: session } = useSession();
@@ -19,21 +20,15 @@ const Page = () => {
 
   const [isActive, setActive] = useState(true);
   const [isDeleted, setDeleted] = useState(false);
-  const [successActive, setSuccessActive] = useState(false);
-  const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSuccessActive(false);
-    }, 5000);
-  }, [successActive]);
-  useEffect(() => {
-    setTimeout(() => {
-      setErrorActive(false);
-    }, 5000);
-  }, [errorActive]);
+  const [resultState, setResultState] = useState<"success" | "error">(
+    "success",
+  );
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCloseModal = () => setModalOpen(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,20 +62,16 @@ const Page = () => {
         updateCategory,
         session?.user.accessToken,
       );
+      setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
-        setSuccessActive(true);
-        setErrorActive(false);
+        setErrorText("Alt kategori başarıyla eklendi.");
       } else {
-        setSuccessActive(false);
-        setErrorActive(true);
-        setErrorText(
-          "Alt Kategori eklenirken hata oluştu: " + a.object.resultText,
-        );
+        setErrorText("" + a.object?.resultText);
       }
     } else {
-      setErrorText("Lütfen alt kategori adı girin.");
-      setErrorActive(true);
+      setErrorText("Alt kategori bulunamadı.");
     }
+    setModalOpen(true);
     setLoading(false);
   }
 
@@ -236,7 +227,7 @@ const Page = () => {
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
                   Aktif Mi?
                   <span className="text-meta-1">
-                    *Kapalı olursa bu kategorideki
+                    *Kapalı olursa bu kategorideki{" "}
                     <span className="text-danger underline">Tüm</span> seviyeler
                     pasif olur
                   </span>
@@ -252,10 +243,6 @@ const Page = () => {
               </div>
 
               <div className="gap-2.5flex flex justify-end gap-2.5">
-                {successActive && !loading && (
-                  <UpdateSuccess title="Kategori başarıyla eklendi." />
-                )}
-                {errorActive && !loading && <UpdateError title={errorText} />}
                 <button
                   onClick={AddNewCategoryToDatabase}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
@@ -278,6 +265,18 @@ const Page = () => {
               </div>
             </div>
           </div>
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={handleCloseModal}
+            title={
+              resultState == "error"
+                ? "Değişiklikler Kaydedilemedi."
+                : "Değişiklikler Başarıyla Kaydedildi."
+            }
+            message={errorText}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </div>
       )}
     </DefaultLayout>

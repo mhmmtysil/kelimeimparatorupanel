@@ -16,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 import CardDataStats from "@/components/CardDataStats";
 import Loader from "@/components/common/Loader";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/CustomModal";
 
 const CalendarPage = () => {
   const { data: session } = useSession();
@@ -24,10 +25,14 @@ const CalendarPage = () => {
   const [resultCategories, setResultCategories] = useState<SubCategory[]>([]);
 
   const [selectedId, setSelectedId] = useState<SubCategory | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [resultText, setResultText] = useState<any>();
+  const [resultState, setResultState] = useState<
+    "success" | "error" | "question"
+  >("success");
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCloseModal = () => setModalOpen(false);
   const [loading, setLoading] = useState(true);
   // Functions
 
@@ -50,6 +55,7 @@ const CalendarPage = () => {
     }
   };
 
+  //@ts-ignore
   const handleTextChange = (event) => {
     if (event.target.value.trim().length > 0) {
       setResultCategories(
@@ -62,11 +68,11 @@ const CalendarPage = () => {
     }
   };
   function openModal() {
-    setIsModalOpen(true);
+    setModalOpen(true);
   }
 
   function closeModal() {
-    setIsModalOpen(false);
+    setModalOpen(false);
   }
   function openResultodal() {
     setResultModal(true);
@@ -135,59 +141,18 @@ const CalendarPage = () => {
             categories={categories}
           />
 
-          <Dialog
-            as="div"
-            className="bg-gray-400 fixed fixed inset-0 inset-0 overflow-y-auto"
-            open={isModalOpen}
-            onClose={closeModal}
-          >
-            <div className="min-h-screen px-4 text-center">
-              <Dialog.Overlay className="bg-gray-400 fixed inset-0 opacity-70" />
-
-              <span
-                className="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-
-              <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left text-center align-middle shadow-xl transition-all">
-                <Dialog.Title className="text-gray-900 text-2xl leading-6">
-                  Bu kayıt silinecek.
-                </Dialog.Title>
-                <div className="mt-3">
-                  <p className="text-gray-500 text-sm">
-                    Kategori ID'si : {selectedId?.id}
-                  </p>
-                </div>
-                <div className="mt-3">
-                  <p className="text-gray-500 text-sm">
-                    Kategori Adı : {selectedId?.title}
-                  </p>
-                </div>
-                <Dialog.Description
-                  as="h3"
-                  className="text-gray-900 mt-3 text-lg font-medium leading-6"
-                >
-                  Emin Misin?
-                </Dialog.Description>
-
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => {
-                      if (selectedId?.id != null)
-                        deleteCategoryFromServer(selectedId?.id);
-                      setIsModalOpen(false);
-                    }}
-                  >
-                    Evet. Silmek istiyorum
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Dialog>
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={() => {
+              if (selectedId?.id != null)
+                deleteCategoryFromServer(selectedId?.id);
+              setModalOpen(false);
+            }}
+            title={"Bu kayıt silinecek. Onaylıyor musunuz? "}
+            message={`Kategori ID'si : ${selectedId?.id} \nKategori Adı : ${selectedId?.title}`}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
 
           {/* Result Modal */}
           <Dialog

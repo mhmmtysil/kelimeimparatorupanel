@@ -96,7 +96,7 @@ export async function DeleteSubCategory(categoryId, accessToken) {
   });
 }
 
-export async function UpdateSubCategory(updateCategory) {
+export async function UpdateSubCategory(updateCategory, accessToken) {
   return await baseRequesAuth(
     "SubCategory/UpdateSubCategory",
     accessToken,
@@ -119,4 +119,19 @@ export async function UpdateLevel(level, accessToken) {
 
 export async function AddNewLevel(level, accessToken) {
   return await baseRequesAuth("Level/AddNewLevel", accessToken, level);
+}
+
+export async function AddNewNotification(notification, accessToken) {
+  return await baseRequesAuth(
+    "Notification/SendNotification",
+    accessToken,
+    notification,
+  );
+}
+
+export async function GetAllNotifications(accessToken) {
+  return await baseRequesAuth(
+    "Notification/GetAllNotificationsPanel",
+    accessToken,
+  );
 }

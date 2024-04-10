@@ -17,6 +17,7 @@ import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/CustomModal";
 
 interface Props {
   initialList: string;
@@ -50,16 +51,13 @@ const Page = () => {
   );
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSuccessActive(false);
-    }, 5000);
-  }, [successActive]);
-  useEffect(() => {
-    setTimeout(() => {
-      setErrorActive(false);
-    }, 5000);
-  }, [errorActive]);
+  const [errorText, setErrorText] = useState("");
+  const [resultState, setResultState] = useState<"success" | "error">(
+    "success",
+  );
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCloseModal = () => setModalOpen(false);
 
   const fetchData = async () => {
     try {
@@ -156,13 +154,13 @@ const Page = () => {
       isDeleted: isDeleted,
     };
     var a = await UpdateLevel(level, session?.user.accessToken);
+    setResultState(a?.code === "100" ? "success" : "error");
     if (a?.code == "100") {
-      setSuccessActive(true);
-      setErrorActive(false);
+      setErrorText("Bildirim başarıyla gönderildi. ");
     } else {
-      setSuccessActive(false);
-      setErrorActive(true);
+      setErrorText("Lütfen Bildirim başlığı ve metnini girin.");
     }
+    setModalOpen(true);
     setLoading(false);
   }
   return (
@@ -723,6 +721,18 @@ const Page = () => {
               </div>
             </div>
           </div>
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={handleCloseModal}
+            title={
+              resultState == "error"
+                ? "Değişiklikler Kaydedilemedi."
+                : "Değişiklikler Başarıyla Kaydedildi."
+            }
+            message={errorText}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </div>
       )}
     </DefaultLayout>

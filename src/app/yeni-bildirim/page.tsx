@@ -3,8 +3,12 @@ import Calendar from "@/components/Calender";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { SetStateAction, useEffect, useState } from "react";
-import { Category, UpdateCategoryModel } from "@/models/Category";
-import { UpdateCategory } from "@/services/apiService";
+import {
+  Category,
+  NewCategoryModel,
+  UpdateCategoryModel,
+} from "@/models/Category";
+import { AddNewCategory, AddNewNotification } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -12,24 +16,14 @@ import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const { data: session } = useSession();
-  const searchParams = useSearchParams();
-  const selectedId = searchParams.get("id") || 0;
-  const categoryName = searchParams.get("categoryName") || "";
-  const categoryActive = searchParams.get("isActive") || "";
-  const categoryDeleted = searchParams.get("isDeleted") || "";
-
-  const [inputValue, setInputValue] = useState(
-    searchParams.get("categoryName") || "",
-  );
-  const [isActive, setActive] = useState(categoryActive == "true");
-  const [isDeleted, setDeleted] = useState(categoryDeleted == "true");
-
+  const [title, setTitle] = useState("");
+  const [explanation, setExplanation] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [errorText, setErrorText] = useState("");
   const [resultState, setResultState] = useState<"success" | "error">(
     "success",
@@ -38,28 +32,35 @@ const Page = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const handleCloseModal = () => setModalOpen(false);
 
-  async function UpdateCategoryFromDatabase() {
-    if (selectedId != null) {
-      var updateCategory: UpdateCategoryModel = {
-        categoryId: Number(selectedId),
-        categoryName: inputValue,
-        isActive: isActive,
-        isDeleted: isDeleted,
-      };
-      setLoading(true);
-      var a = await UpdateCategory(updateCategory, session?.user.accessToken);
+
+  async function AddNewCategoryToDatabase() {
+    var notification = {
+      title: title,
+      description: explanation,
+    };
+    setLoading(true);
+    if (
+      title != "" &&
+      title != undefined &&
+      explanation != undefined &&
+      explanation != undefined
+    ) {
+      var a = await AddNewNotification(notification, session?.user.accessToken);
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
-        setErrorText("Kategori başarıyla güncellendi.");
+        setErrorText("Bildirim başarıyla gönderildi. ");
       } else {
         setResultState("error");
         setErrorText(
           "Kategori güncellenirken hata oluştu: " + a.object?.resultText,
         );
       }
-      setModalOpen(true);
-      setLoading(false);
+    } else {
+      setResultState("error");
+      setErrorText("Lütfen Bildirim başlığı ve metnini girin.");
     }
+    setModalOpen(true);
+    setLoading(false);
   }
 
   return (
@@ -71,51 +72,79 @@ const Page = () => {
             <div className="flex w-full flex-col gap-5.5 p-6.5">
               <div className="border-b border-stroke py-4 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
-                  {selectedId} Numaralı Kategori'yi Düzenle
+                  Yeni Bildirim Gönder
                 </h3>
               </div>
+
+              {/* Bildirim Başlığı */}
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Kategori Adı: <span className="">*Zorunlu alan</span>
+                  Bildirim Başlığı:
                 </label>
                 <input
                   type="text"
-                  value={inputValue}
+                  value={title}
                   onChange={(text) => {
-                    setInputValue(text.target.value);
+                    setTitle(text.target.value);
                   }}
-                  placeholder={categoryName}
+                  placeholder={"Bildirim Başlığı.."}
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
-              </div>
-              <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Aktif Mi?{" "}
-                  <span className="text-meta-1">
-                    *Kapalı olursa bu kategorideki{" "}
-                    <span className="text-danger underline">Tüm</span> seviyeler
-                    pasif olur{" "}
-                  </span>
-                </label>
-                <Switch isActive={isActive} setActive={setActive} />
+                <div className="mt-4 rounded-full">
+                  <Image
+                    width={405}
+                    height={112}
+                    src={"/images/notificationTitle.png"}
+                    alt="User"
+                    style={{
+                      width: "auto",
+                      height: "auto",
+                    }}
+                  />
+                </div>
               </div>
 
+              {/* Bildirim Metni */}
               <div>
                 <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Silinecek mi?
+                  Bildirim Metni:
                 </label>
-                <Switch isActive={isDeleted} setActive={setDeleted} />
+                <input
+                  type="text"
+                  value={explanation}
+                  onChange={(text) => {
+                    setExplanation(text.target.value);
+                  }}
+                  placeholder={"Mesaj içeriği.."}
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                />
+                <div className="mt-4 rounded-full">
+                  <Image
+                    width={405}
+                    height={112}
+                    src={"/images/explanation.png"}
+                    alt="User"
+                    style={{
+                      width: "auto",
+                      height: "auto",
+                    }}
+                  />
+                </div>
               </div>
 
               <div className="gap-2.5flex flex justify-end gap-2.5">
+                {/* {successActive && !loading && (
+                  <UpdateSuccess title="Bildirim başarıyla gönderildi." />
+                )}
+                {errorActive && !loading && <UpdateError title={errorText} />} */}
                 <button
-                  onClick={UpdateCategoryFromDatabase}
+                  onClick={AddNewCategoryToDatabase}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
                 >
                   <span>
                     <UpdateTick />
                   </span>
-                  Güncelle
+                  Kaydet
                 </button>
                 <Link
                   passHref
@@ -129,21 +158,22 @@ const Page = () => {
                 </Link>
               </div>
             </div>
-            <CustomModal
-              isOpen={modalOpen}
-              closeModal={handleCloseModal}
-              title={
-                resultState == "error"
-                  ? "İşlem Tamamlanamadı."
-                  : "İşlem Başarıyla Tamamlandı."
-              }
-              message={errorText}
-              viewDetailsButtonText={"Tamam"}
-              type={resultState}
-            />
           </div>
         </div>
       )}
+
+      <CustomModal
+        isOpen={modalOpen}
+        closeModal={handleCloseModal}
+        title={
+          resultState == "error"
+            ? "Bildirim Gönderilemedi."
+            : "Bildirim Başarıyla Gönderildi."
+        }
+        message={errorText}
+        viewDetailsButtonText={"Tamam"}
+        type={resultState}
+      />
     </DefaultLayout>
   );
 };

@@ -1,33 +1,22 @@
 "use client";
-import Calendar from "@/components/Calender";
-import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { SetStateAction, useEffect, useState } from "react";
-import { Category, UpdateCategoryModel } from "@/models/Category";
-import { UpdateCategory } from "@/services/apiService";
-import { Dialog } from "@headlessui/react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import Loader from "@/components/common/Loader";
-import UpdateSuccess from "@/components/UpdateSuccess";
-import UpdateError from "@/components/UpdateError";
+import { Notification } from "@/models/Notification";
+import { GetAllNotifications } from "@/services/apiService";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import "moment/locale/tr";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const { data: session } = useSession();
-  const searchParams = useSearchParams();
-  const selectedId = searchParams.get("id") || 0;
-  const categoryName = searchParams.get("categoryName") || "";
-  const categoryActive = searchParams.get("isActive") || "";
-  const categoryDeleted = searchParams.get("isDeleted") || "";
+  const [title, setTitle] = useState("");
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [explanation, setExplanation] = useState("");
 
-  const [inputValue, setInputValue] = useState(
-    searchParams.get("categoryName") || "",
-  );
-  const [isActive, setActive] = useState(categoryActive == "true");
-  const [isDeleted, setDeleted] = useState(categoryDeleted == "true");
-
+  const [successActive, setSuccessActive] = useState(false);
+  const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [errorText, setErrorText] = useState("");
@@ -38,29 +27,23 @@ const Page = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const handleCloseModal = () => setModalOpen(false);
 
-  async function UpdateCategoryFromDatabase() {
-    if (selectedId != null) {
-      var updateCategory: UpdateCategoryModel = {
-        categoryId: Number(selectedId),
-        categoryName: inputValue,
-        isActive: isActive,
-        isDeleted: isDeleted,
-      };
-      setLoading(true);
-      var a = await UpdateCategory(updateCategory, session?.user.accessToken);
-      setResultState(a?.code === "100" ? "success" : "error");
-      if (a?.code == "100") {
-        setErrorText("Kategori başarıyla güncellendi.");
-      } else {
-        setResultState("error");
-        setErrorText(
-          "Kategori güncellenirken hata oluştu: " + a.object?.resultText,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const _notifications = await GetAllNotifications(
+          session?.user.accessToken,
         );
+        setLoading(false);
+        setNotifications(_notifications.object);
+        console.log(_notifications.object);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+        setLoading(false);
       }
-      setModalOpen(true);
-      setLoading(false);
-    }
-  }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <DefaultLayout>
@@ -69,79 +52,56 @@ const Page = () => {
         <div className="flex flex-col items-center py-4">
           <div className="flex w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="flex w-full flex-col gap-5.5 p-6.5">
-              <div className="border-b border-stroke py-4 dark:border-strokedark">
-                <h3 className="font-medium text-black dark:text-white">
-                  {selectedId} Numaralı Kategori'yi Düzenle
-                </h3>
-              </div>
-              <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Kategori Adı: <span className="">*Zorunlu alan</span>
-                </label>
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(text) => {
-                    setInputValue(text.target.value);
-                  }}
-                  placeholder={categoryName}
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-              </div>
-              <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Aktif Mi?{" "}
-                  <span className="text-meta-1">
-                    *Kapalı olursa bu kategorideki{" "}
-                    <span className="text-danger underline">Tüm</span> seviyeler
-                    pasif olur{" "}
-                  </span>
-                </label>
-                <Switch isActive={isActive} setActive={setActive} />
-              </div>
+              <div className="rounded-sm bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                <div className="border-b border-stroke px-4 py-4 dark:border-strokedark sm:px-6 xl:px-7.5">
+                  <h3 className="font-medium text-black dark:text-white">
+                    Gönderilen Bildirimler
+                  </h3>
+                </div>
+                {notifications.map((category, index) => (
+                  <div
+                    className={`mt-4 rounded-[10px] border-l-[5px] ${category.isActive ? "border-success" : "border-meta-1"} bg-white px-4 py-6 shadow-13 dark:bg-boxdark sm:px-5 xl:px-7.5`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-5">
+                      <div className="flex gap-5">
+                        <div className="w-full">
+                          <h4 className="mb-[3px] text-title-xsm font-bold text-black dark:text-white">
+                            {category.mailTitle}
+                          </h4>
+                          <p className="mb-[3px] font-medium">
+                            {category.mailText}
+                          </p>
+                          <span className="text-sm font-medium">
+                            {" "}
+                            {moment(category.mailDate).format(
+                              "DD MMMM YYYY, HH:mm:ss",
+                            )}{" "}
+                            tarihinde gönderildi.
+                          </span>
+                        </div>
+                      </div>
 
-              <div>
-                <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                  Silinecek mi?
-                </label>
-                <Switch isActive={isDeleted} setActive={setDeleted} />
-              </div>
-
-              <div className="gap-2.5flex flex justify-end gap-2.5">
-                <button
-                  onClick={UpdateCategoryFromDatabase}
-                  className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
-                >
-                  <span>
-                    <UpdateTick />
-                  </span>
-                  Güncelle
-                </button>
-                <Link
-                  passHref
-                  href={"/ana-kategoriler"}
-                  className="inline-flex items-center justify-center gap-2.5 rounded-md bg-danger px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
-                >
-                  <span>
-                    <CloseIcon />
-                  </span>
-                  Vazgeç
-                </Link>
+                      <button className="inline-flex rounded-md bg-gray px-2.5 py-1.5 text-sm font-medium leading-[22px] dark:bg-graydark">
+                        Sil
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            <CustomModal
-              isOpen={modalOpen}
-              closeModal={handleCloseModal}
-              title={
-                resultState == "error"
-                  ? "İşlem Tamamlanamadı."
-                  : "İşlem Başarıyla Tamamlandı."
-              }
-              message={errorText}
-              viewDetailsButtonText={"Tamam"}
-              type={resultState}
-            />
           </div>
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={handleCloseModal}
+            title={
+              resultState == "error"
+                ? "İşlem Tamamlanamadı."
+                : "İşlem Başarıyla Tamamlandı."
+            }
+            message={errorText}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </div>
       )}
     </DefaultLayout>

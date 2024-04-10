@@ -16,27 +16,21 @@ import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const { data: session } = useSession();
   const [inputValue, setInputValue] = useState("");
   const [isActive, setActive] = useState(true);
   const [isDeleted, setDeleted] = useState(false);
-  const [successActive, setSuccessActive] = useState(false);
-  const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorText, setErrorText] = useState("");
+  const [resultState, setResultState] = useState<"success" | "error">(
+    "success",
+  );
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSuccessActive(false);
-    }, 5000);
-  }, [successActive]);
-  useEffect(() => {
-    setTimeout(() => {
-      setErrorActive(false);
-    }, 5000);
-  }, [errorActive]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCloseModal = () => setModalOpen(false);
 
   async function AddNewCategoryToDatabase() {
     var updateCategory: NewCategoryModel = {
@@ -50,20 +44,17 @@ const Page = () => {
       updateCategory.categoryName != undefined
     ) {
       var a = await AddNewCategory(updateCategory, session?.user.accessToken);
+      setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
-        setSuccessActive(true);
-        setErrorActive(false);
+        setErrorText("Yeni Kategori başarıyla eklendi.");
       } else {
-        setSuccessActive(false);
-        setErrorActive(true);
-        setErrorText(
-          "Kategori güncellenirken hata oluştu: " + a.object.resultText,
-        );
+        setErrorText("Kategori eklenirken hata oluştu: " + a.object.resultText);
       }
     } else {
+      setResultState("error");
       setErrorText("Lütfen kategori adı girin.");
-      setErrorActive(true);
     }
+    setModalOpen(true);
     setLoading(false);
   }
 
@@ -114,10 +105,6 @@ const Page = () => {
               </div>
 
               <div className="gap-2.5flex flex justify-end gap-2.5">
-                {successActive && !loading && (
-                  <UpdateSuccess title="Kategori başarıyla eklendi." />
-                )}
-                {errorActive && !loading && <UpdateError title={errorText} />}
                 <button
                   onClick={AddNewCategoryToDatabase}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
@@ -140,6 +127,18 @@ const Page = () => {
               </div>
             </div>
           </div>
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={handleCloseModal}
+            title={
+              resultState == "error"
+                ? "Değişiklikler Kaydedilemedi."
+                : "Değişiklikler Başarıyla Kaydedildi."
+            }
+            message={errorText}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </div>
       )}
     </DefaultLayout>

@@ -10,6 +10,7 @@ import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -34,20 +35,15 @@ const Page = () => {
   const [isDeleted, setDeleted] = useState(categoryDeleted == "false");
   const [maxLetters, setMaxLetters] = useState(Number(maxLettersCount));
 
-  const [successActive, setSuccessActive] = useState(false);
-  const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSuccessActive(false);
-    }, 5000);
-  }, [successActive]);
-  useEffect(() => {
-    setTimeout(() => {
-      setErrorActive(false);
-    }, 5000);
-  }, [errorActive]);
+  const [errorText, setErrorText] = useState("");
+  const [resultState, setResultState] = useState<"success" | "error">(
+    "success",
+  );
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCloseModal = () => setModalOpen(false);
 
   const fetchData = async () => {
     try {
@@ -75,14 +71,17 @@ const Page = () => {
         maxLetters: maxLetters,
       };
       setLoading(true);
-      var a = await UpdateSubCategory(updateCategory);
+      var a = await UpdateSubCategory(updateCategory,session?.user.accessToken);
+      setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
-        setSuccessActive(true);
-        setErrorActive(false);
+        setErrorText("Alt kategori başarıyla güncellendi.");
       } else {
-        setSuccessActive(false);
-        setErrorActive(true);
+        setResultState("error");
+        setErrorText(
+          "Alt Kategori güncellenirken hata oluştu: " + a.object?.resultText,
+        );
       }
+      setModalOpen(true);
       setLoading(false);
     }
   }
@@ -257,12 +256,6 @@ const Page = () => {
               </div>
 
               <div className="gap-2.5flex flex justify-end gap-2.5">
-                {successActive && !loading && (
-                  <UpdateSuccess title="Başarıyla güncellendi." />
-                )}
-                {errorActive && !loading && (
-                  <UpdateError title={"Güncelleme sırasında hata."} />
-                )}
                 <button
                   onClick={UpdateCategoryFromDatabase}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"
@@ -285,6 +278,19 @@ const Page = () => {
               </div>
             </div>
           </div>
+
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={handleCloseModal}
+            title={
+              resultState == "error"
+                ? "İşlem Tamamlanamadı."
+                : "İşlem Başarıyla Tamamlandı."
+            }
+            message={errorText}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </div>
       )}
     </DefaultLayout>

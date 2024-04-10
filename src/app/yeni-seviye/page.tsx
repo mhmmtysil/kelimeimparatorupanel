@@ -12,6 +12,7 @@ import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
+import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const { data: session } = useSession();
@@ -20,24 +21,17 @@ const Page = () => {
   const [isActive, setActive] = useState(true);
   const [isDeleted, setDeleted] = useState(false);
   const [isBonus, setBonus] = useState(false);
-
-  const [successActive, setSuccessActive] = useState(false);
-  const [errorActive, setErrorActive] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState<number>(0);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSuccessActive(false);
-    }, 5000);
-  }, [successActive]);
-  useEffect(() => {
-    setTimeout(() => {
-      setErrorActive(false);
-    }, 5000);
-  }, [errorActive]);
+  const [resultState, setResultState] = useState<"success" | "error">(
+    "success",
+  );
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCloseModal = () => setModalOpen(false);
 
   const fetchData = async () => {
     try {
@@ -67,7 +61,7 @@ const Page = () => {
   const [items, setItems] = useState([""]);
   const [itemsExtra, setItemsExtra] = useState([""]);
   const [itemsSolved, setItemsSolved] = useState([""]);
-  const [errorText, setErrorText] = useState([""]);
+  const [errorText, setErrorText] = useState("");
 
   const addInput = () => {
     setItems([...items, ""]);
@@ -126,17 +120,25 @@ const Page = () => {
       isDeleted: isDeleted,
     };
     var a = await AddNewLevel(level, session?.user.accessToken);
+    setResultState(a?.code === "100" ? "success" : "error");
     if (a?.code == "100") {
-      setSuccessActive(true);
-      setErrorActive(false);
+      setErrorText("Yeni seviye başarıyla Eklendi.");
     } else {
-      setSuccessActive(false);
-      setErrorActive(true);
-      setErrorText(a?.object.resultText);
+      setErrorText("Hata." + a?.object.resultText);
     }
-
+    setModalOpen(true);
     setLoading(false);
   }
+
+  // setResultState(a?.code === "100" ? "success" : "error");
+  //   if (a?.code == "100") {
+  //     setErrorText("Bildirim başarıyla gönderildi. ");
+  //   } else {
+  //     setErrorText("Lütfen Bildirim başlığı ve metnini girin.");
+  //   }
+  //   setModalOpen(true);
+  //   setLoading(false);
+  // }
   return (
     <DefaultLayout>
       {loading && <Loader />}
@@ -695,6 +697,18 @@ const Page = () => {
               </div>
             </div>
           </div>
+          <CustomModal
+            isOpen={modalOpen}
+            closeModal={handleCloseModal}
+            title={
+              resultState == "error"
+                ? "Değişiklikler Kaydedilemedi."
+                : "Değişiklikler Başarıyla Kaydedildi."
+            }
+            message={errorText}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </div>
       )}
     </DefaultLayout>

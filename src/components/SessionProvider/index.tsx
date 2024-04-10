@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Loader from "../common/Loader";
 
 import SignIn from "../Login";
-
 function Session({
   children,
 }: Readonly<{
@@ -12,7 +11,7 @@ function Session({
 }>) {
   const [loading, setLoading] = useState<boolean>(true);
   const { data: session } = useSession();
-
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
