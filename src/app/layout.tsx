@@ -1,11 +1,7 @@
 "use client";
-import "flatpickr/dist/flatpickr.min.css";
-import "@/css/satoshi.css";
-import "@/css/style.css";
-import React, { useEffect, useState } from "react";
-import Loader from "@/components/common/Loader";
 import Session from "@/components/SessionProvider";
 import { SessionProvider } from "next-auth/react";
+import React from "react";
 
 export default function RootLayout({
   children,
