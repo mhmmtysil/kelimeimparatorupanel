@@ -8,19 +8,18 @@ import {
   NewCategoryModel,
   UpdateCategoryModel,
 } from "@/models/Category";
-import {
-  AddNewCategory,
-} from "@/services/apiService";
+import { AddNewCategory } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
+  const { data: session } = useSession();
   const [inputValue, setInputValue] = useState("");
-
   const [isActive, setActive] = useState(true);
   const [isDeleted, setDeleted] = useState(false);
   const [successActive, setSuccessActive] = useState(false);
@@ -50,7 +49,7 @@ const Page = () => {
       updateCategory.categoryName != "" &&
       updateCategory.categoryName != undefined
     ) {
-      var a = await AddNewCategory(updateCategory);
+      var a = await AddNewCategory(updateCategory, session?.user.accessToken);
       if (a?.code == "100") {
         setSuccessActive(true);
         setErrorActive(false);

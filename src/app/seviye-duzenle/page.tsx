@@ -11,12 +11,14 @@ import { useSearchParams } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
+import { useSession } from "next-auth/react";
 
 interface Props {
   initialList: string;
 }
 
 const Page = () => {
+  const { data: session } = useSession();
   const [categories, setCategories] = useState<SubCategory[]>([]);
   const searchParams = useSearchParams();
   const _selectedId = searchParams.get("id") || 0;
@@ -56,7 +58,9 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const _categories = await GetAllSubCategoryDatas();
+      const _categories = await GetAllSubCategoryDatas(
+        session?.user.accessToken,
+      );
 
       setCategories(_categories.object);
       setLoading(false);
@@ -179,44 +183,44 @@ const Page = () => {
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                       <g
                         id="SVGRepo_tracerCarrier"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></g>
                       <g id="SVGRepo_iconCarrier">
                         <path
                           d="M17 10H19C21 10 22 9 22 7V5C22 3 21 2 19 2H17C15 2 14 3 14 5V7C14 9 15 10 17 10Z"
                           stroke="#292D32"
-                          stroke-width="1.5"
-                          stroke-miterlimit="10"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="1.5"
+                          strokeMiterlimit="10"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                         <path
                           d="M5 22H7C9 22 10 21 10 19V17C10 15 9 14 7 14H5C3 14 2 15 2 17V19C2 21 3 22 5 22Z"
                           stroke="#292D32"
-                          stroke-width="1.5"
-                          stroke-miterlimit="10"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="1.5"
+                          strokeMiterlimit="10"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                         <path
                           d="M6 10C8.20914 10 10 8.20914 10 6C10 3.79086 8.20914 2 6 2C3.79086 2 2 3.79086 2 6C2 8.20914 3.79086 10 6 10Z"
                           stroke="#292D32"
-                          stroke-width="1.5"
-                          stroke-miterlimit="10"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="1.5"
+                          strokeMiterlimit="10"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                         <path
                           d="M18 22C20.2091 22 22 20.2091 22 18C22 15.7909 20.2091 14 18 14C15.7909 14 14 15.7909 14 18C14 20.2091 15.7909 22 18 22Z"
                           stroke="#292D32"
-                          stroke-width="1.5"
-                          stroke-miterlimit="10"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="1.5"
+                          strokeMiterlimit="10"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                       </g>
                     </svg>
@@ -296,8 +300,8 @@ const Page = () => {
                         fill="white"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M10 0C4.47716 0 0 4.47716 0 10C0 15.5229 4.47716 20 10 20C15.5229 20 20 15.5229 20 10C20 4.47716 15.5229 0 10 0ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10Z"
                         fill="white"
                       />
@@ -334,8 +338,8 @@ const Page = () => {
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M0 10C0 4.47716 4.47716 0 10 0C15.5229 0 20 4.47716 20 10C20 15.5229 15.5229 20 10 20C4.47716 20 0 15.5229 0 10ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM5 10C5 9.44771 5.44772 9 6 9H14C14.5523 9 15 9.44771 15 10C15 10.5523 14.5523 11 14 11H6C5.44772 11 5 10.5523 5 10Z"
                             fill="white"
                           />
@@ -371,8 +375,8 @@ const Page = () => {
                         fill="white"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M10 0C4.47716 0 0 4.47716 0 10C0 15.5229 4.47716 20 10 20C15.5229 20 20 15.5229 20 10C20 4.47716 15.5229 0 10 0ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10Z"
                         fill="white"
                       />
@@ -409,8 +413,8 @@ const Page = () => {
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M0 10C0 4.47716 4.47716 0 10 0C15.5229 0 20 4.47716 20 10C20 15.5229 15.5229 20 10 20C4.47716 20 0 15.5229 0 10ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM5 10C5 9.44771 5.44772 9 6 9H14C14.5523 9 15 9.44771 15 10C15 10.5523 14.5523 11 14 11H6C5.44772 11 5 10.5523 5 10Z"
                             fill="white"
                           />
@@ -449,8 +453,8 @@ const Page = () => {
                         fill="white"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M10 0C4.47716 0 0 4.47716 0 10C0 15.5229 4.47716 20 10 20C15.5229 20 20 15.5229 20 10C20 4.47716 15.5229 0 10 0ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10Z"
                         fill="white"
                       />
@@ -487,8 +491,8 @@ const Page = () => {
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M0 10C0 4.47716 4.47716 0 10 0C15.5229 0 20 4.47716 20 10C20 15.5229 15.5229 20 10 20C4.47716 20 0 15.5229 0 10ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM5 10C5 9.44771 5.44772 9 6 9H14C14.5523 9 15 9.44771 15 10C15 10.5523 14.5523 11 14 11H6C5.44772 11 5 10.5523 5 10Z"
                             fill="white"
                           />
@@ -527,8 +531,8 @@ const Page = () => {
                         fill="white"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M10 0C4.47716 0 0 4.47716 0 10C0 15.5229 4.47716 20 10 20C15.5229 20 20 15.5229 20 10C20 4.47716 15.5229 0 10 0ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10Z"
                         fill="white"
                       />
@@ -565,8 +569,8 @@ const Page = () => {
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M0 10C0 4.47716 4.47716 0 10 0C15.5229 0 20 4.47716 20 10C20 15.5229 15.5229 20 10 20C4.47716 20 0 15.5229 0 10ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM5 10C5 9.44771 5.44772 9 6 9H14C14.5523 9 15 9.44771 15 10C15 10.5523 14.5523 11 14 11H6C5.44772 11 5 10.5523 5 10Z"
                             fill="white"
                           />
@@ -605,8 +609,8 @@ const Page = () => {
                         fill="white"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M10 0C4.47716 0 0 4.47716 0 10C0 15.5229 4.47716 20 10 20C15.5229 20 20 15.5229 20 10C20 4.47716 15.5229 0 10 0ZM2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10Z"
                         fill="white"
                       />
@@ -643,8 +647,8 @@ const Page = () => {
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M0 10C0 4.47716 4.47716 0 10 0C15.5229 0 20 4.47716 20 10C20 15.5229 15.5229 20 10 20C4.47716 20 0 15.5229 0 10ZM10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM5 10C5 9.44771 5.44772 9 6 9H14C14.5523 9 15 9.44771 15 10C15 10.5523 14.5523 11 14 11H6C5.44772 11 5 10.5523 5 10Z"
                             fill="white"
                           />

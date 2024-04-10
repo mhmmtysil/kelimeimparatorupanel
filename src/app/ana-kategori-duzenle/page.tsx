@@ -11,8 +11,10 @@ import { useSearchParams } from "next/navigation";
 import Loader from "@/components/common/Loader";
 import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
+  const { data: session } = useSession();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("id") || 0;
   const categoryName = searchParams.get("categoryName") || "";
@@ -49,7 +51,7 @@ const Page = () => {
         isDeleted: isDeleted,
       };
       setLoading(true);
-      var a = await UpdateCategory(updateCategory);
+      var a = await UpdateCategory(updateCategory, session?.user.accessToken);
       if (a?.code == "100") {
         setSuccessActive(true);
         setErrorActive(false);

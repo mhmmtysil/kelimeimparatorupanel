@@ -56,7 +56,10 @@ const CalendarPage = () => {
 
   async function deleteCategoryFromServer(deleteId: number) {
     if (deleteId != null) {
-      const deleteResult = await DeleteCategory(deleteId);
+      const deleteResult = await DeleteCategory(
+        deleteId,
+        session?.user.accessToken,
+      );
       setResultText(deleteResult);
       openResultodal();
     }
@@ -67,7 +70,9 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllCategoryDatas(session?.user.accessToken);
+        const _categories = await GetAllCategoryDatas(
+          session?.user.accessToken,
+        );
         setLoading(false);
         setCategories(_categories.object);
         setResultCategories(_categories.object);
