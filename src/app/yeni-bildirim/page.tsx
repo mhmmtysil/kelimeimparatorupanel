@@ -45,7 +45,7 @@ const Page = () => {
       explanation != undefined &&
       explanation != undefined
     ) {
-      var a = await AddNewNotification(notification, session?.user.accessToken);
+      var a = await AddNewNotification(notification, );
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
         setErrorText("Bildirim başarıyla gönderildi. ");

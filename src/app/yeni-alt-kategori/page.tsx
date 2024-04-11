@@ -60,7 +60,7 @@ const Page = () => {
     if (updateCategory.categoryId != null || updateCategory.categoryId != 0) {
       var a = await AddNewSubCategory(
         updateCategory,
-        session?.user.accessToken,
+        ,
       );
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {

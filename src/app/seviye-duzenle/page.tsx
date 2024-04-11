@@ -62,7 +62,7 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const _categories = await GetAllSubCategoryDatas(
-        session?.user.accessToken,
+        ,
       );
 
       setCategories(_categories.object);
@@ -153,7 +153,7 @@ const Page = () => {
       isActive: isActive,
       isDeleted: isDeleted,
     };
-    var a = await UpdateLevel(level, session?.user.accessToken);
+    var a = await UpdateLevel(level, );
     setResultState(a?.code === "100" ? "success" : "error");
     if (a?.code == "100") {
       setErrorText("Bildirim başarıyla gönderildi. ");

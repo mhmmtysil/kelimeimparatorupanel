@@ -19,11 +19,9 @@ const ECommerce: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const fetchData = async () => {
     try {
-      const _categories = await GetAllCategoryDatas(session?.user.accessToken);
-      const _subcategories = await GetAllSubCategoryDatas(
-        session?.user.accessToken,
-      );
-      const _levels = await GetAllLevels(session?.user.accessToken);
+      const _categories = await GetAllCategoryDatas();
+      const _subcategories = await GetAllSubCategoryDatas();
+      const _levels = await GetAllLevels();
       setCategories(_categories.object);
       setSubCategories(_subcategories.object);
       setLevels(_levels.object);

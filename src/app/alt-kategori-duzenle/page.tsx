@@ -47,7 +47,7 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const _categories = await GetAllCategoryDatas(session?.user.accessToken);
+      const _categories = await GetAllCategoryDatas();
 
       setCategories(_categories.object);
       setLoading(false);
@@ -71,7 +71,7 @@ const Page = () => {
         maxLetters: maxLetters,
       };
       setLoading(true);
-      var a = await UpdateSubCategory(updateCategory,session?.user.accessToken);
+      var a = await UpdateSubCategory(updateCategory,);
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
         setErrorText("Alt kategori başarıyla güncellendi.");

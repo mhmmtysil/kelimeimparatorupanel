@@ -30,7 +30,7 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const _notifications = await GetAllNotifications(
-        session?.user.accessToken,
+        ,
       );
       setLoading(false);
       setNotifications(_notifications.object);

@@ -36,7 +36,7 @@ const Page = () => {
   const fetchData = async () => {
     try {
       const _categories = await GetAllSubCategoryDatas(
-        session?.user.accessToken,
+        ,
       );
 
       setCategories(_categories.object);
@@ -119,7 +119,7 @@ const Page = () => {
       isActive: isActive,
       isDeleted: isDeleted,
     };
-    var a = await AddNewLevel(level, session?.user.accessToken);
+    var a = await AddNewLevel(level, );
     setResultState(a?.code === "100" ? "success" : "error");
     if (a?.code == "100") {
       setErrorText("Yeni seviye başarıyla Eklendi.");

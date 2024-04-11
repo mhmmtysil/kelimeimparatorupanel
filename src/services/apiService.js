@@ -53,79 +53,79 @@ export async function Login(user) {
   }
 }
 
-export async function GetAllCategoryDatas(accessToken) {
-  return await baseRequesAuth("Category/GetAllCategoryDatas", accessToken);
+export async function GetAllCategoryDatas() {
+  return await baseRequesAuth("Category/GetAllCategoryDatas");
 }
 
-export async function DeleteCategory(categoryId, accessToken) {
-  return await baseRequesAuth("Category/DeleteCategory", accessToken, {
+export async function DeleteCategory(categoryId) {
+  return await baseRequesAuth("Category/DeleteCategory", {
     categoryId: categoryId,
   });
 }
 
-export async function UpdateCategory(updateCategory, accessToken) {
+export async function UpdateCategory(updateCategory) {
   return await baseRequesAuth(
     "Category/UpdateCategory",
-    accessToken,
+
     updateCategory,
   );
 }
 
-export async function AddNewCategory(newCategory, accessToken) {
+export async function AddNewCategory(newCategory) {
   return await baseRequesAuth(
     "Category/AddNewCategory",
-    accessToken,
+
     newCategory,
   );
 }
 
-export async function GetAllSubCategoryDatas(accessToken) {
-  return await baseRequesAuth("Category/GetAllSubCategoryDatas", accessToken);
+export async function GetAllSubCategoryDatas() {
+  return await baseRequesAuth("Category/GetAllSubCategoryDatas");
 }
 
-export async function AddNewSubCategory(newSubCategory, accessToken) {
+export async function AddNewSubCategory(newSubCategory) {
   return await baseRequesAuth(
     "SubCategory/AddNewSubCategory",
-    accessToken,
+
     newSubCategory,
   );
 }
 
-export async function DeleteSubCategory(categoryId, accessToken) {
-  return await baseRequesAuth("SubCategory/DeleteSubCategory", accessToken, {
+export async function DeleteSubCategory(categoryId) {
+  return await baseRequesAuth("SubCategory/DeleteSubCategory", {
     categoryId: categoryId,
   });
 }
 
-export async function UpdateSubCategory(updateCategory, accessToken) {
+export async function UpdateSubCategory(updateCategory) {
   return await baseRequesAuth(
     "SubCategory/UpdateSubCategory",
-    accessToken,
+
     updateCategory,
   );
 }
-export async function GetAllLevels(accessToken) {
-  return await baseRequesAuth("Level/GetAllLevels", accessToken);
+export async function GetAllLevels() {
+  return await baseRequesAuth("Level/GetAllLevels");
 }
 
-export async function DeleteLevel(categoryId, accessToken) {
-  return await baseRequesAuth("Level/DeleteLevel", accessToken, {
+export async function DeleteLevel(categoryId) {
+  return await baseRequesAuth("Level/DeleteLevel", {
     categoryId: categoryId,
   });
 }
 
-export async function UpdateLevel(level, accessToken) {
-  return await baseRequesAuth("Level/UpdateLevel", accessToken, level);
+export async function UpdateLevel(level) {
+  return await baseRequesAuth("Level/UpdateLevel", level);
 }
 
-export async function AddNewLevel(level, accessToken) {
-  return await baseRequesAuth("Level/AddNewLevel", accessToken, level);
+export async function AddNewLevel(level) {
+  return await baseRequesAuth("Level/AddNewLevel", level);
 }
 
-export async function AddNewNotification(notification, accessToken) {
+export async function AddNewNotification(notification) {
   return await baseRequesAuth(
     "Notification/SendNotification",
-    accessToken,
+
     notification,
   );
 }

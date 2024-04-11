@@ -66,7 +66,7 @@ const CalendarPage = () => {
     if (deleteId != null) {
       const deleteResult = await DeleteLevel(
         deleteId,
-        session?.user.accessToken,
+        ,
       );
       setResultText(deleteResult);
       openResultodal();
@@ -78,7 +78,7 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllLevels(session?.user.accessToken);
+        const _categories = await GetAllLevels();
         const _subCategories = await GetAllSubCategoryDatas(
           session?.user?.accessToken,
         );
