@@ -189,6 +189,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup>
 
               {/* <!-- Bölümler --> */}
+
               <li>
                 <Link
                   href="/seviyeler"
@@ -207,7 +208,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/yeni-seviye"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("seviyeler") &&
+                    pathname.includes("yeni-seviye") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -221,7 +222,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/yeni-bildirim"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("seviyeler") &&
+                    pathname.includes("yeni-bildirim") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -235,7 +236,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/gonderilen-bildirimler"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("seviyeler") &&
+                    pathname.includes("gonderilen-bildirimler") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
