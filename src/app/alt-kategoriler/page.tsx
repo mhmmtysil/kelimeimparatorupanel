@@ -19,7 +19,6 @@ import { useSession } from "next-auth/react";
 import CustomModal from "@/components/CustomModal";
 
 const CalendarPage = () => {
-  
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [resultCategories, setResultCategories] = useState<SubCategory[]>([]);
@@ -148,49 +147,14 @@ const CalendarPage = () => {
             type={resultState}
           />
 
-          {/* Result Modal */}
-          <Dialog
-            as="div"
-            className="bg-gray-400 fixed fixed inset-0 inset-0 overflow-y-auto"
-            open={resultModal}
-            onClose={closeResultModal}
-          >
-            <div className="min-h-screen px-4 text-center">
-              <Dialog.Overlay className="bg-gray-400 fixed inset-0 opacity-70" />
-
-              <span
-                className="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-
-              <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left text-center align-middle shadow-xl transition-all">
-                <Dialog.Title className="text-gray-900 text-2xl leading-6">
-                  İşlem sonuçlandı.
-                </Dialog.Title>
-                {resultText?.code == "100" ? (
-                  <Dialog.Title className="mt-3 text-2xl leading-8 text-green-500">
-                    {resultText?.object?.resultText}
-                  </Dialog.Title>
-                ) : (
-                  <Dialog.Title className="mt-3 text-2xl leading-8 text-danger">
-                    {resultText?.object?.resultText}
-                  </Dialog.Title>
-                )}
-
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => closeResultModal()}
-                  >
-                    Kapat
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Dialog>
+          <CustomModal
+            isOpen={resultModal}
+            closeModal={closeResultModal}
+            title={"İşlem sonuçlandı."}
+            message={`Kategori ID'si : ${selectedId?.id} \nKategori Adı : ${selectedId?.title}`}
+            viewDetailsButtonText={"Tamam"}
+            type={resultState}
+          />
         </>
       )}
     </DefaultLayout>
