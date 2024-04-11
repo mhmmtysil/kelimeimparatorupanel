@@ -8,7 +8,7 @@ import { User } from "@/models/User";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const { data: session } = useSession();
+  
 
   const [user, setUser] = useLocalStorage<User | null>("user", null);
 

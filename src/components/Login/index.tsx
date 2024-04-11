@@ -8,17 +8,27 @@ import Lottie from "lottie-react";
 import astronaut from "@images/lottie/security.json";
 import { signIn } from "next-auth/react";
 import router from "next/router";
+import { Login } from "@/services/apiService";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const res = await signIn("credentials", {
+
+    var result = await Login({
       email: email,
       password: password,
-      redirect: false,
     });
+    console.log(result);
+
+    if (result.object != null) {
+      localStorage.setItem("user", JSON.stringify(result.object));
+      return result.object;
+    } else {
+      localStorage.setItem("user", "");
+      return null;
+    }
   };
   return (
     <DefaultLayout isSidebarOpen={false} isHeaderOpen={false}>

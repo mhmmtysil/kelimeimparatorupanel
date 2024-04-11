@@ -43,7 +43,7 @@ export async function Login(user) {
     });
 
     if (!res.ok) {
-      throw new Error(ERROR_MESSAGE);
+      throw new Error(res);
     }
 
     const data = await res.json();

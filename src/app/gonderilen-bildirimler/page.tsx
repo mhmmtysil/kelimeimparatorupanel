@@ -10,7 +10,7 @@ import "moment/locale/tr";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
-  const { data: session } = useSession();
+  
   const [title, setTitle] = useState("");
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [explanation, setExplanation] = useState("");

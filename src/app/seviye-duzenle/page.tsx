@@ -24,7 +24,7 @@ interface Props {
 }
 
 const Page = () => {
-  const { data: session } = useSession();
+  
   const [categories, setCategories] = useState<SubCategory[]>([]);
   const searchParams = useSearchParams();
   const _selectedId = searchParams.get("id") || 0;

@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { Category, Level, SubCategory } from "@/models/Category";
 
 const ECommerce: React.FC = () => {
-  const { data: session } = useSession();
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [levels, setLevels] = useState<Level[]>([]);

@@ -18,7 +18,7 @@ import Loader from "@/components/common/Loader";
 import { useSession } from "next-auth/react";
 
 const CalendarPage = () => {
-  const { data: session } = useSession();
+  
   const [mainCategories, setMainCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [categories, setCategories] = useState<Level[]>([]);

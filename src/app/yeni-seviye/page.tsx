@@ -15,7 +15,7 @@ import { useSession } from "next-auth/react";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
-  const { data: session } = useSession();
+  
   const [categories, setCategories] = useState<SubCategory[]>([]);
 
   const [isActive, setActive] = useState(true);

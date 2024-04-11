@@ -20,7 +20,7 @@ import Image from "next/image";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
-  const { data: session } = useSession();
+  
   const [title, setTitle] = useState("");
   const [explanation, setExplanation] = useState("");
   const [loading, setLoading] = useState(false);

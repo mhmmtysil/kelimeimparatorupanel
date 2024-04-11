@@ -14,7 +14,7 @@ import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
+  
   const selectedId = searchParams.get("id") || 0;
   const categoryName = searchParams.get("categoryName") || "";
   const categoryActive = searchParams.get("isActive") || "";

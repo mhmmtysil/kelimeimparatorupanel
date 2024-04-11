@@ -13,7 +13,7 @@ import Loader from "@/components/common/Loader";
 import { useSession } from "next-auth/react";
 
 const CalendarPage = () => {
-  const { data: session } = useSession();
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [resultCategories, setResultCategories] = useState<Category[]>([]);
   const [selectedId, setSelectedId] = useState<Category | null>(null);

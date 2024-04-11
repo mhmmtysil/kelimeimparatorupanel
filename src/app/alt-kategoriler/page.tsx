@@ -19,7 +19,7 @@ import { useSession } from "next-auth/react";
 import CustomModal from "@/components/CustomModal";
 
 const CalendarPage = () => {
-  const { data: session } = useSession();
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
   const [resultCategories, setResultCategories] = useState<SubCategory[]>([]);

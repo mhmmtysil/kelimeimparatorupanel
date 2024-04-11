@@ -15,7 +15,7 @@ import { useSession } from "next-auth/react";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
-  const { data: session } = useSession();
+  
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("id") || 0;
   const categoryName = searchParams.get("categoryName") || "";
