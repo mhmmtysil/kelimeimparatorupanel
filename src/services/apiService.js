@@ -20,6 +20,7 @@ async function baseRequesAuth(endpoint, body) {
     return data;
   } catch (error) {
     console.error(error);
+    
     throw new Error(ERROR_MESSAGE);
   }
 }
