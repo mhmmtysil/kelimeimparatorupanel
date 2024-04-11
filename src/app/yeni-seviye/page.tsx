@@ -13,6 +13,7 @@ import UpdateSuccess from "@/components/UpdateSuccess";
 import UpdateError from "@/components/UpdateError";
 import { useSession } from "next-auth/react";
 import CustomModal from "@/components/CustomModal";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [categories, setCategories] = useState<SubCategory[]>([]);
@@ -29,8 +30,12 @@ const Page = () => {
     "success",
   );
 
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
-  const handleCloseModal = () => setModalOpen(false);
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    router.push("/seviyeler")
+  };
 
   const fetchData = async () => {
     try {
@@ -126,16 +131,6 @@ const Page = () => {
     setModalOpen(true);
     setLoading(false);
   }
-
-  // setResultState(a?.code === "100" ? "success" : "error");
-  //   if (a?.code == "100") {
-  //     setErrorText("Bildirim başarıyla gönderildi. ");
-  //   } else {
-  //     setErrorText("Lütfen Bildirim başlığı ve metnini girin.");
-  //   }
-  //   setModalOpen(true);
-  //   setLoading(false);
-  // }
   return (
     <DefaultLayout>
       {loading && <Loader />}
