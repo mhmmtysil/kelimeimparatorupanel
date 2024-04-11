@@ -15,7 +15,6 @@ import { useSession } from "next-auth/react";
 import CustomModal from "@/components/CustomModal";
 
 const Page = () => {
-  
   const [categories, setCategories] = useState<SubCategory[]>([]);
 
   const [isActive, setActive] = useState(true);
@@ -122,7 +121,7 @@ const Page = () => {
     if (a?.code == "100") {
       setErrorText("Yeni seviye başarıyla Eklendi.");
     } else {
-      setErrorText("Hata." + a?.object.resultText);
+      setErrorText("Hata." + a?.object?.resultText);
     }
     setModalOpen(true);
     setLoading(false);

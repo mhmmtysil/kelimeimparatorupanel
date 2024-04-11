@@ -115,7 +115,7 @@ const CalendarPage = () => {
             rate={categories.filter((a) => a.isActive).length + " adet aktif"}
             levelUp={false}
             buttonText="Yeni Bölüm Ekle"
-            href="/yeni-kategori"
+            href="/yeni-seviye"
           >
             <TotalDataIcon />
           </CardDataStats>
