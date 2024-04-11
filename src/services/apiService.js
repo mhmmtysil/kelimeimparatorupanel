@@ -142,3 +142,11 @@ export async function GetAllNotifications(accessToken) {
     accessToken,
   );
 }
+
+export async function GetAdvertisementIds() {
+  return await baseRequesAuth("Ad/GetAdvertisementIdsPanel");
+}
+
+export async function UpdateAdvert(advert) {
+  return await baseRequesAuth("Ad/UpdateAdvert", advert);
+}
