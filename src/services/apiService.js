@@ -12,16 +12,21 @@ async function baseRequesAuth(endpoint, body) {
       },
       body: body ? JSON.stringify(body) : null,
     });
+
+    if (res.status === 401) {
+      localStorage.removeItem("user");
+      window.location.reload();
+      return;
+    }
     if (!res.ok) {
-      throw new Error(ERROR_MESSAGE);
+      return ERROR_MESSAGE;
     }
 
     const data = await res.json();
     return data;
   } catch (error) {
     console.error(error);
-    
-    throw new Error(ERROR_MESSAGE);
+    return ERROR_MESSAGE;
   }
 }
 
