@@ -64,10 +64,7 @@ const CalendarPage = () => {
 
   async function deleteLevelFromServer(deleteId: number) {
     if (deleteId != null) {
-      const deleteResult = await DeleteLevel(
-        deleteId,
-        ,
-      );
+      const deleteResult = await DeleteLevel(deleteId);
       setResultText(deleteResult);
       openResultodal();
     }
@@ -79,12 +76,8 @@ const CalendarPage = () => {
     const fetchData = async () => {
       try {
         const _categories = await GetAllLevels();
-        const _subCategories = await GetAllSubCategoryDatas(
-          session?.user?.accessToken,
-        );
-        const _mainCategories = await GetAllCategoryDatas(
-          session?.user?.accessToken,
-        );
+        const _subCategories = await GetAllSubCategoryDatas();
+        const _mainCategories = await GetAllCategoryDatas();
         setSubCategories(_subCategories.object);
         setCategories(_categories.object);
         setMainCategories(_mainCategories.object);

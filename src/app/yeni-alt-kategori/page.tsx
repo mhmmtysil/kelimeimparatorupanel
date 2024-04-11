@@ -33,9 +33,7 @@ const Page = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllCategoryDatas(
-          session?.user?.accessToken,
-        );
+        const _categories = await GetAllCategoryDatas();
 
         setCategories(_categories.object);
         setLoading(false);
@@ -58,10 +56,7 @@ const Page = () => {
     };
     setLoading(true);
     if (updateCategory.categoryId != null || updateCategory.categoryId != 0) {
-      var a = await AddNewSubCategory(
-        updateCategory,
-        ,
-      );
+      var a = await AddNewSubCategory(updateCategory);
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
         setErrorText("Alt kategori başarıyla eklendi.");

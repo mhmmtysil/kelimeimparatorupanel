@@ -1,6 +1,6 @@
 const ERROR_MESSAGE = "Api request failed.";
 
-async function baseRequesAuth(endpoint, accessToken, body) {
+async function baseRequesAuth(endpoint, body) {
   var user = JSON.parse(localStorage.getItem("user"));
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`, {
