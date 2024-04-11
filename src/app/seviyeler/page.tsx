@@ -24,7 +24,7 @@ const CalendarPage = () => {
   const [categories, setCategories] = useState<Level[]>([]);
   const [resultCategories, setResultCategories] = useState<Level[]>([]);
 
-  const [selectedId, setSelectedId] = useState<Category | null>(null);
+  const [selectedId, setSelectedId] = useState<Level | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resultModal, setResultModal] = useState(false);
   const [resultText, setResultText] = useState<any>();
@@ -36,7 +36,7 @@ const CalendarPage = () => {
   // Functions
 
   //@ts-ignore
-  const handleTextChange = (event) => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.trim().length > 0) {
       setResultCategories(
         categories.filter((a) =>
@@ -162,7 +162,7 @@ const CalendarPage = () => {
                 </div>
                 <div className="mt-3">
                   <p className="text-gray-500 text-sm">
-                    Kategori Adı : {selectedId?.categoryName}
+                    Kategori Adı : {selectedId?.categoryId}
                   </p>
                 </div>
                 <Dialog.Description

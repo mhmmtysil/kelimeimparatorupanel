@@ -55,8 +55,7 @@ const CalendarPage = () => {
     }
   };
 
-  //@ts-ignore
-  const handleTextChange = (event) => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.trim().length > 0) {
       setResultCategories(
         subCategories.filter((a) =>

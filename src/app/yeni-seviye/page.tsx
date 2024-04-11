@@ -669,12 +669,6 @@ const Page = () => {
                 <Switch isActive={isDeleted} setActive={setDeleted} />
               </div>
               <div className="gap-2.5flex flex justify-end gap-2.5">
-                {successActive && !loading && (
-                  <UpdateSuccess title="Başarıyla eklendi." />
-                )}
-                {errorActive && !loading && (
-                  <UpdateError title={"Hata. " + errorText} />
-                )}
                 <button
                   onClick={UpdateCategoryFromDatabase}
                   className="inline-flex items-center justify-center gap-2.5 rounded-md bg-green-500 px-10 py-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5"

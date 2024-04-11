@@ -4,11 +4,8 @@ import { useEffect, useState } from "react";
 import Loader from "../common/Loader";
 
 import SignIn from "../Login";
-function Session({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+//@ts-ignore
+function Session({ children }) {
   const [loading, setLoading] = useState<boolean>(true);
   const { data: session } = useSession();
   const [initialized, setInitialized] = useState(false);

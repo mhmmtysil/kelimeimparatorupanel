@@ -27,21 +27,21 @@ const Page = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const handleCloseModal = () => setModalOpen(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const _notifications = await GetAllNotifications(
-          session?.user.accessToken,
-        );
-        setLoading(false);
-        setNotifications(_notifications.object);
-        console.log(_notifications.object);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const _notifications = await GetAllNotifications(
+        session?.user.accessToken,
+      );
+      setLoading(false);
+      setNotifications(_notifications.object);
+      console.log(_notifications.object);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -60,6 +60,7 @@ const Page = () => {
                 </div>
                 {notifications.map((category, index) => (
                   <div
+                    key={index}
                     className={`mt-4 rounded-[10px] border-l-[5px] ${category.isActive ? "border-success" : "border-meta-1"} bg-white px-4 py-6 shadow-13 dark:bg-boxdark sm:px-5 xl:px-7.5`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-5">

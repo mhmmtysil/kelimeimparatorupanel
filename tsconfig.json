@@ -22,7 +22,7 @@
       "@images/*": ["./public/*"]
     },
     "typeRoots": ["./node_modules/@types", "./types"],
-    "types": ["node", "next-auth"],
+    "types": ["node"],
     "declaration": true,
     "declarationDir": "./types"
   },
