@@ -26,7 +26,8 @@ const CalendarPage = () => {
   const searchParams = useSearchParams();
 
   // Functions
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //@ts-ignore
+  const handleTextChange = (event) => {
     if (event.target.value.trim().length > 0) {
       setResultCategories(
         categories.filter((a) =>
@@ -56,10 +57,7 @@ const CalendarPage = () => {
 
   async function deleteCategoryFromServer(deleteId: number) {
     if (deleteId != null) {
-      const deleteResult = await DeleteCategory(
-        deleteId,
-        ,
-      );
+      const deleteResult = await DeleteCategory(deleteId);
       setResultText(deleteResult);
       openResultodal();
     }
@@ -70,9 +68,7 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllCategoryDatas(
-          ,
-        );
+        const _categories = await GetAllCategoryDatas();
         setLoading(false);
         setCategories(_categories.object);
         setResultCategories(_categories.object);
