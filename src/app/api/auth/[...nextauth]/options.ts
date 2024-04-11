@@ -13,7 +13,6 @@ const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       if (token && token.user) {
-        //@ts-ignore
         session.user = token.user;
       }
       return session;
@@ -33,8 +32,12 @@ const authOptions: AuthOptions = {
           password: credentials?.password,
         });
         if (result.object != null) {
+          localStorage.setItem("user", JSON.stringify(result.object));
           return result.object;
-        } else return null;
+        } else {
+          localStorage.setItem("user", "");
+          return null;
+        }
       },
     }),
   ],

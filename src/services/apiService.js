@@ -1,12 +1,13 @@
 const ERROR_MESSAGE = "Api request failed.";
 
 async function baseRequesAuth(endpoint, accessToken, body) {
+  var user = JSON.parse(localStorage.getItem("user"));
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`, {
       method: "POST",
       cache: "no-cache",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${user?.accessToken}`,
         "Content-Type": "application/json",
       },
       body: body ? JSON.stringify(body) : null,
