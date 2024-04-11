@@ -29,9 +29,7 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const _notifications = await GetAllNotifications(
-        ,
-      );
+      const _notifications = await GetAllNotifications();
       setLoading(false);
       setNotifications(_notifications.object);
       console.log(_notifications.object);

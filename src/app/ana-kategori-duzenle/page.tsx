@@ -47,7 +47,7 @@ const Page = () => {
         isDeleted: isDeleted,
       };
       setLoading(true);
-      var a = await UpdateCategory(updateCategory, );
+      var a = await UpdateCategory(updateCategory);
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
         setErrorText("Kategori başarıyla güncellendi.");

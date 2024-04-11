@@ -43,7 +43,7 @@ const Page = () => {
       updateCategory.categoryName != "" &&
       updateCategory.categoryName != undefined
     ) {
-      var a = await AddNewCategory(updateCategory, );
+      var a = await AddNewCategory(updateCategory);
       setResultState(a?.code === "100" ? "success" : "error");
       if (a?.code == "100") {
         setErrorText("Yeni Kategori başarıyla eklendi.");

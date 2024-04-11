@@ -35,9 +35,7 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      const _categories = await GetAllSubCategoryDatas(
-        ,
-      );
+      const _categories = await GetAllSubCategoryDatas();
 
       setCategories(_categories.object);
       setLoading(false);
@@ -119,7 +117,7 @@ const Page = () => {
       isActive: isActive,
       isDeleted: isDeleted,
     };
-    var a = await AddNewLevel(level, );
+    var a = await AddNewLevel(level);
     setResultState(a?.code === "100" ? "success" : "error");
     if (a?.code == "100") {
       setErrorText("Yeni seviye başarıyla Eklendi.");

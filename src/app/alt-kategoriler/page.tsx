@@ -41,9 +41,7 @@ const CalendarPage = () => {
       const _categories = await GetAllCategoryDatas();
 
       setCategories(_categories.object);
-      const _subCategories = await GetAllSubCategoryDatas(
-        ,
-      );
+      const _subCategories = await GetAllSubCategoryDatas();
       setSubCategories(_subCategories.object);
 
       setResultCategories(_subCategories.object);
@@ -83,10 +81,7 @@ const CalendarPage = () => {
 
   async function deleteCategoryFromServer(deleteId: number) {
     if (deleteId != null) {
-      const deleteResult = await DeleteSubCategory(
-        deleteId,
-        ,
-      );
+      const deleteResult = await DeleteSubCategory(deleteId);
       // if(deleteResult.)
       if (deleteResult.code == "100") {
         fetchData();
