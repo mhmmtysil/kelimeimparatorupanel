@@ -20,10 +20,10 @@ const SignIn: React.FC = () => {
       email: email,
       password: password,
     });
-    console.log(result);
 
     if (result.object != null) {
       localStorage.setItem("user", JSON.stringify(result.object));
+      window.location.reload();
       return result.object;
     } else {
       localStorage.setItem("user", "");

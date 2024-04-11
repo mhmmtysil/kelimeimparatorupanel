@@ -9,12 +9,19 @@ import { User } from "@/models/User";
 //@ts-ignore
 function Session({ children }) {
   const [loading, setLoading] = useState<boolean>(true);
-  
-  const [initialized, setInitialized] = useState(false);
 
   const [user, setUser] = useLocalStorage<User | null>("user", null);
 
-  console.log(user);
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const newUser = localStorage.getItem("user");
+      setUser(newUser ? JSON.parse(newUser) : null);
+    };
+    window.addEventListener("user", handleStorageChange);
+    return () => {
+      window.removeEventListener("user", handleStorageChange);
+    };
+  }, []);
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);

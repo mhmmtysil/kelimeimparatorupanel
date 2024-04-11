@@ -8,8 +8,6 @@ import { User } from "@/models/User";
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  
-
   const [user, setUser] = useLocalStorage<User | null>("user", null);
 
   const trigger = useRef<any>(null);
@@ -125,7 +123,10 @@ const DropdownUser = () => {
           </li>
         </ul>
         <button
-          onClick={() => signOut()}
+          onClick={() => {
+            localStorage.setItem("user", "");
+            window.location.reload();
+          }}
           className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
         >
           <svg
