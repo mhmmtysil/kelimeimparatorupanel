@@ -56,9 +56,10 @@ const Page = () => {
     });
   };
 
-  const handleFileChange = (event: { preventDefault: () => void; target: { files: any[]; }; }) => {
-    event.preventDefault();
-    const selectedFile = event.target.files[0];
+  //@ts-ignore
+  const handleFileChange = (e) => {
+    e.preventDefault();
+    const selectedFile = e.target.files[0];
     setFile(selectedFile);
   };
 
