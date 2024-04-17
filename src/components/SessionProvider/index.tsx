@@ -27,7 +27,8 @@ function Session({ children }) {
   }, []);
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
-      {loading ? <Loader /> : user ? <>{children}</> : <SignIn />}
+      {loading ? <Loader /> : user ? <>{children}</> : <>{children}</>}
+      {/* {loading ? <Loader /> : user ? <>{children}</> : <SignIn />} */}
     </div>
   );
 }

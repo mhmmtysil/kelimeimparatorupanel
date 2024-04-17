@@ -118,10 +118,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
                           (pathname === "/" ||
                             pathname.includes("dashboard")) &&
-                          "bg-graydark dark:bg-meta-4"
+                          "bg-form-strokedark dark:bg-meta-4"
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -193,9 +193,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/seviyeler"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
                     pathname.includes("seviyeler") &&
-                    "bg-graydark dark:bg-meta-4"
+                    "bg-form-strokedark dark:bg-meta-4"
                   }`}
                 >
                   <LevelsIcon />
@@ -207,9 +207,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/yeni-seviye"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
                     pathname.includes("yeni-seviye") &&
-                    "bg-graydark dark:bg-meta-4"
+                    "bg-form-strokedark dark:bg-meta-4"
                   }`}
                 >
                   <AddNewLevelIcon />
@@ -217,13 +217,42 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </Link>
               </li>
 
+              {/* <!-- Excel Levels --> */}
+              <li>
+                <Link
+                  href="/toplu-seviye"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
+                    pathname.includes("toplu-seviye") &&
+                    "bg-form-strokedark dark:bg-meta-4"
+                  }`}
+                >
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 21 21"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clip-path="url(#clip0_852_23)">
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M8.08685 1.78021C8.24313 1.62393 8.45509 1.53613 8.67611 1.53613H15.3428C16.7235 1.53613 17.8428 2.65542 17.8428 4.03613V8.2028C17.8428 8.66303 17.4697 9.03613 17.0094 9.03613C16.5492 9.03613 16.1761 8.66303 16.1761 8.2028V4.03613C16.1761 3.5759 15.803 3.2028 15.3428 3.2028H9.50944V7.36947C9.50944 7.8297 9.13636 8.2028 8.67611 8.2028H4.50944V17.3695C4.50944 17.8297 4.88254 18.2028 5.34277 18.2028H6.17611C6.63634 18.2028 7.00944 18.5759 7.00944 19.0361C7.00944 19.4964 6.63634 19.8695 6.17611 19.8695H5.34277C3.96207 19.8695 2.84277 18.7502 2.84277 17.3695V7.36947C2.84277 7.14845 2.93057 6.93649 3.08685 6.78021L8.08685 1.78021ZM5.68795 6.53613H7.84277V4.38131L5.68795 6.53613ZM16.1761 10.7028C16.6364 10.7028 17.0094 11.0759 17.0094 11.5361V16.5361H19.5094C19.9697 16.5361 20.3428 16.9092 20.3428 17.3695C20.3428 17.8297 19.9697 18.2028 19.5094 18.2028H16.1761C15.7159 18.2028 15.3428 17.8297 15.3428 17.3695V11.5361C15.3428 11.0759 15.7159 10.7028 16.1761 10.7028ZM10.1875 11.0518C9.92002 10.6772 9.39961 10.5906 9.02511 10.8581C8.65057 11.1256 8.56382 11.646 8.83136 12.0205L10.5687 14.4528L8.83136 16.8851C8.56382 17.2596 8.65057 17.7801 9.02511 18.0476C9.39961 18.3151 9.92002 18.2284 10.1875 17.8538L11.5928 15.8866L12.998 17.8538C13.2655 18.2284 13.7859 18.3151 14.1604 18.0476C14.535 17.7801 14.6217 17.2596 14.3542 16.8851L12.6169 14.4528L14.3542 12.0205C14.6217 11.646 14.535 11.1256 14.1604 10.8581C13.7859 10.5906 13.2655 10.6772 12.998 11.0518L11.5928 13.0191L10.1875 11.0518Z"
+                        fill="#3AE658"
+                      />
+                    </g>
+                  </svg>
+                  Toplu Bölüm Ekleme
+                </Link>
+              </li>
+
               {/* <!-- Yeni Bildirim Ekle --> */}
               <li>
                 <Link
                   href="/yeni-bildirim"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
                     pathname.includes("yeni-bildirim") &&
-                    "bg-graydark dark:bg-meta-4"
+                    "bg-form-strokedark dark:bg-meta-4"
                   }`}
                 >
                   <SendNotificationIcon />
@@ -235,9 +264,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/gonderilen-bildirimler"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
                     pathname.includes("gonderilen-bildirimler") &&
-                    "bg-graydark dark:bg-meta-4"
+                    "bg-form-strokedark dark:bg-meta-4"
                   }`}
                 >
                   <NotificationIcon />
@@ -249,9 +278,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/reklam-kimlikleri"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
                     pathname.includes("reklam-kimlikleri") &&
-                    "bg-graydark dark:bg-meta-4"
+                    "bg-form-strokedark dark:bg-meta-4"
                   }`}
                 >
                   <svg

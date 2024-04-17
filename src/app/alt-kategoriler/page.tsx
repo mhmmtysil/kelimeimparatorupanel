@@ -116,9 +116,9 @@ const CalendarPage = () => {
 
           <CardDataStats
             title="Toplam Alt Kategori"
-            total={subCategories.length.toString()}
+            total={subCategories?.length.toString()}
             rate={
-              subCategories.filter((a) => a.isActive).length + " adet aktif"
+              subCategories?.filter((a) => a.isActive).length + " adet aktif"
             }
             levelUp={false}
             buttonText="Yeni Alt Kategori Ekle"
@@ -203,7 +203,7 @@ const CategoriesTable = ({
             </tr>
           </thead>
           <tbody>
-            {data.map((packageItem, key) => (
+            {data?.map((packageItem, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">

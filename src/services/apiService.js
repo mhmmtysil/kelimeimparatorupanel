@@ -7,7 +7,9 @@ async function baseRequesAuth(endpoint, body) {
       method: "POST",
       cache: "no-cache",
       headers: {
-        Authorization: `Bearer ${user?.accessToken}`,
+        // Authorization: `Bearer ${user?.accessToken}`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJtdWhhbW1ldHllc2lsQG91dGxvb2suY29tLnRyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Ik11aGFtbWV0IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6IlllxZ9pbCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IjAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiJBcHIgVGh1IDE4IDIwMjQgMTY6MTY6MjEgUE0iLCJuYmYiOjE3MTMzMzY5ODEsImV4cCI6MTcxMzQ0NjE4MSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6MzM1NTEiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDozMzU1MSJ9.6-79DfiQJ5gj_7y_rZ7zVnopLUdE_9rsP1bFZFkUB1Q`,
+
         "Content-Type": "application/json",
       },
       body: body ? JSON.stringify(body) : null,
@@ -126,6 +128,11 @@ export async function UpdateLevel(level) {
 
 export async function AddNewLevel(level) {
   return await baseRequesAuth("Level/AddNewLevel", level);
+}
+
+
+export async function AddNewLevelBulk(level) {
+  return await baseRequesAuth("Level/AddNewLevelBulk", level);
 }
 
 export async function AddNewNotification(notification) {

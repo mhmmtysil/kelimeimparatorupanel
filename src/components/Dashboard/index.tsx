@@ -41,11 +41,11 @@ const ECommerce: React.FC = () => {
           <></>
         ) : (
           <Link href={"/ana-kategoriler"}>
-            <CardDataStats
+            {/* <CardDataStats
               href=""
               title="Kategoriler"
-              total={categories.length.toString()}
-              rate={categories.filter((a) => a.isActive).length + " Aktif"}
+              total={categories?.length.toString()}
+              rate={categories?.filter((a) => a.isActive).length + " Aktif"}
               levelUp={false}
             >
               <svg
@@ -73,17 +73,17 @@ const ECommerce: React.FC = () => {
                   fill=""
                 />
               </svg>
-            </CardDataStats>
+            </CardDataStats> */}
           </Link>
         )}
         {loading ? (
           <></>
         ) : (
           <Link href={"/alt-kategoriler"}>
-            <CardDataStats
+            {/* <CardDataStats
               href=""
               title="Alt Kategoriler"
-              total={subCategories.length.toString()}
+              total={subCategories?.length.toString()}
               rate={subCategories.filter((a) => a.isActive).length + " Aktif"}
               levelUp={false}
             >
@@ -108,14 +108,14 @@ const ECommerce: React.FC = () => {
                   fill=""
                 />
               </svg>
-            </CardDataStats>
+            </CardDataStats> */}
           </Link>
         )}
         {loading ? (
           <></>
         ) : (
           <Link href={"/seviyeler"}>
-            <CardDataStats
+            {/* <CardDataStats
               href=""
               title="Bölümler"
               total={levels.length.toString()}
@@ -135,7 +135,7 @@ const ECommerce: React.FC = () => {
                   fill=""
                 />
               </svg>
-            </CardDataStats>
+            </CardDataStats> */}
           </Link>
         )}
       </div>
