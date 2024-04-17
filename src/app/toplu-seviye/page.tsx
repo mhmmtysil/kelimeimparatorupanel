@@ -63,13 +63,37 @@ const Page = () => {
     setFile(selectedFile);
   };
 
+  function findLongest(textToFind: string) {
+    const words = textToFind.split(",");
+    let longestOne = "";
+    words.forEach(function (_word) {
+      if (_word.length > longestOne.length) {
+        longestOne = _word;
+      }
+    });
+
+    return longestOne;
+  }
+
+  function mixLetters(word: string) {
+    const wordArray = word.split("");
+    for (let i = wordArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [wordArray[i], wordArray[j]] = [wordArray[j], wordArray[i]];
+    }
+    const mixedWord = wordArray.join("");
+    return mixedWord;
+  }
+
   async function UploadFileToDatabase() {
     var levels: Array<NewLevel> = new Array<NewLevel>();
     if (file) {
       readExcel(file).then(async (d: Array<NewLevel>) => {
         d.forEach((element) => {
           var a: NewLevel = {
-            letters: element.letters.trim().toLowerCase(),
+            letters: mixLetters(findLongest(element.words?.toLowerCase()))
+              .trim()
+              .toLowerCase(),
             additionalLetters: element.additionalLetters.replace("-", "") ?? "",
             solvedWords: element.solvedWords.replace("-", "") ?? "",
             words: element.words?.toLowerCase(),
@@ -81,6 +105,7 @@ const Page = () => {
           };
           levels.push(a);
         });
+
         var a = await AddNewLevelBulk(levels);
         console.log(a);
 
