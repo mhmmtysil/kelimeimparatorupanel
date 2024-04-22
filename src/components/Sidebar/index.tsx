@@ -233,16 +233,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g clip-path="url(#clip0_852_23)">
+                    <g clipPath="url(#clip0_852_23)">
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M8.08685 1.78021C8.24313 1.62393 8.45509 1.53613 8.67611 1.53613H15.3428C16.7235 1.53613 17.8428 2.65542 17.8428 4.03613V8.2028C17.8428 8.66303 17.4697 9.03613 17.0094 9.03613C16.5492 9.03613 16.1761 8.66303 16.1761 8.2028V4.03613C16.1761 3.5759 15.803 3.2028 15.3428 3.2028H9.50944V7.36947C9.50944 7.8297 9.13636 8.2028 8.67611 8.2028H4.50944V17.3695C4.50944 17.8297 4.88254 18.2028 5.34277 18.2028H6.17611C6.63634 18.2028 7.00944 18.5759 7.00944 19.0361C7.00944 19.4964 6.63634 19.8695 6.17611 19.8695H5.34277C3.96207 19.8695 2.84277 18.7502 2.84277 17.3695V7.36947C2.84277 7.14845 2.93057 6.93649 3.08685 6.78021L8.08685 1.78021ZM5.68795 6.53613H7.84277V4.38131L5.68795 6.53613ZM16.1761 10.7028C16.6364 10.7028 17.0094 11.0759 17.0094 11.5361V16.5361H19.5094C19.9697 16.5361 20.3428 16.9092 20.3428 17.3695C20.3428 17.8297 19.9697 18.2028 19.5094 18.2028H16.1761C15.7159 18.2028 15.3428 17.8297 15.3428 17.3695V11.5361C15.3428 11.0759 15.7159 10.7028 16.1761 10.7028ZM10.1875 11.0518C9.92002 10.6772 9.39961 10.5906 9.02511 10.8581C8.65057 11.1256 8.56382 11.646 8.83136 12.0205L10.5687 14.4528L8.83136 16.8851C8.56382 17.2596 8.65057 17.7801 9.02511 18.0476C9.39961 18.3151 9.92002 18.2284 10.1875 17.8538L11.5928 15.8866L12.998 17.8538C13.2655 18.2284 13.7859 18.3151 14.1604 18.0476C14.535 17.7801 14.6217 17.2596 14.3542 16.8851L12.6169 14.4528L14.3542 12.0205C14.6217 11.646 14.535 11.1256 14.1604 10.8581C13.7859 10.5906 13.2655 10.6772 12.998 11.0518L11.5928 13.0191L10.1875 11.0518Z"
                         fill="#3AE658"
                       />
                     </g>
                   </svg>
                   Toplu Bölüm Ekleme
+                </Link>
+              </li>
+
+              {/* <!-- Kullanıcılar --> */}
+              <li>
+                <Link
+                  href="/oyuncular"
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-form-strokedark dark:hover:bg-meta-4 ${
+                    pathname.includes("oyuncular") &&
+                    "bg-form-strokedark dark:bg-meta-4"
+                  }`}
+                >
+                  <UserIcon />
+                  Oyuncular
                 </Link>
               </li>
 
@@ -291,11 +305,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="#000000"
                   >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g
                       id="SVGRepo_tracerCarrier"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></g>
                     <g id="SVGRepo_iconCarrier">
                       <g>
@@ -357,7 +371,7 @@ const LevelsIcon = () => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_756_242)">
+      <g clipPath="url(#clip0_756_242)">
         <path d="M15.925 0H11.835V4.09008H15.925V0Z" fill="#C8773F" />
         <path d="M8.66349 0H4.5686V4.09008H8.66349V0Z" fill="#C8773F" />
         <path d="M23.1916 0H19.0967V4.09008H23.1916V0Z" fill="#C8773F" />
@@ -824,10 +838,10 @@ const NotificationIcon = () => {
           y2="1937.57"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFC200" />
-          <stop offset="0.268" stop-color="#FFBB00" />
-          <stop offset="0.659" stop-color="#FFA801" />
-          <stop offset="1" stop-color="#FF9102" />
+          <stop stopColor="#FFC200" />
+          <stop offset="0.268" stopColor="#FFBB00" />
+          <stop offset="0.659" stopColor="#FFA801" />
+          <stop offset="1" stopColor="#FF9102" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_756_172"
@@ -837,11 +851,11 @@ const NotificationIcon = () => {
           y2="39.1543"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFC200" stop-opacity="0" />
-          <stop offset="0.203" stop-color="#FFBB00" stop-opacity="0.203" />
-          <stop offset="0.499" stop-color="#FFA700" stop-opacity="0.499" />
-          <stop offset="0.852" stop-color="#FF8800" stop-opacity="0.852" />
-          <stop offset="1" stop-color="#FF7800" />
+          <stop stopColor="#FFC200" stopOpacity="0" />
+          <stop offset="0.203" stopColor="#FFBB00" stopOpacity="0.203" />
+          <stop offset="0.499" stopColor="#FFA700" stopOpacity="0.499" />
+          <stop offset="0.852" stopColor="#FF8800" stopOpacity="0.852" />
+          <stop offset="1" stopColor="#FF7800" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_756_172"
@@ -851,10 +865,10 @@ const NotificationIcon = () => {
           y2="3406.17"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFC200" />
-          <stop offset="0.268" stop-color="#FFBB00" />
-          <stop offset="0.659" stop-color="#FFA801" />
-          <stop offset="1" stop-color="#FF9102" />
+          <stop stopColor="#FFC200" />
+          <stop offset="0.268" stopColor="#FFBB00" />
+          <stop offset="0.659" stopColor="#FFA801" />
+          <stop offset="1" stopColor="#FF9102" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_756_172"
@@ -864,10 +878,10 @@ const NotificationIcon = () => {
           y2="4049.01"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFC200" />
-          <stop offset="0.268" stop-color="#FFBB00" />
-          <stop offset="0.659" stop-color="#FFA801" />
-          <stop offset="1" stop-color="#FF9102" />
+          <stop stopColor="#FFC200" />
+          <stop offset="0.268" stopColor="#FFBB00" />
+          <stop offset="0.659" stopColor="#FFA801" />
+          <stop offset="1" stopColor="#FF9102" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_756_172"
@@ -877,11 +891,11 @@ const NotificationIcon = () => {
           y2="692.139"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFC200" stop-opacity="0" />
-          <stop offset="0.203" stop-color="#FFBB00" stop-opacity="0.203" />
-          <stop offset="0.499" stop-color="#FFA700" stop-opacity="0.499" />
-          <stop offset="0.852" stop-color="#FF8800" stop-opacity="0.852" />
-          <stop offset="1" stop-color="#FF7800" />
+          <stop stopColor="#FFC200" stopOpacity="0" />
+          <stop offset="0.203" stopColor="#FFBB00" stopOpacity="0.203" />
+          <stop offset="0.499" stopColor="#FFA700" stopOpacity="0.499" />
+          <stop offset="0.852" stopColor="#FF8800" stopOpacity="0.852" />
+          <stop offset="1" stopColor="#FF7800" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_756_172"
@@ -891,11 +905,11 @@ const NotificationIcon = () => {
           y2="117.276"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFC200" stop-opacity="0" />
-          <stop offset="0.203" stop-color="#FFBB00" stop-opacity="0.203" />
-          <stop offset="0.499" stop-color="#FFA700" stop-opacity="0.499" />
-          <stop offset="0.852" stop-color="#FF8800" stop-opacity="0.852" />
-          <stop offset="1" stop-color="#FF7800" />
+          <stop stopColor="#FFC200" stopOpacity="0" />
+          <stop offset="0.203" stopColor="#FFBB00" stopOpacity="0.203" />
+          <stop offset="0.499" stopColor="#FFA700" stopOpacity="0.499" />
+          <stop offset="0.852" stopColor="#FF8800" stopOpacity="0.852" />
+          <stop offset="1" stopColor="#FF7800" />
         </linearGradient>
         <linearGradient
           id="paint6_linear_756_172"
@@ -905,10 +919,10 @@ const NotificationIcon = () => {
           y2="1576.47"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#D63305" />
-          <stop offset="0.366" stop-color="#CF3004" />
-          <stop offset="0.899" stop-color="#BC2602" />
-          <stop offset="1" stop-color="#B72401" />
+          <stop stopColor="#D63305" />
+          <stop offset="0.366" stopColor="#CF3004" />
+          <stop offset="0.899" stopColor="#BC2602" />
+          <stop offset="1" stopColor="#B72401" />
         </linearGradient>
       </defs>
     </svg>
@@ -945,6 +959,73 @@ const SendNotificationIcon = () => {
       <path
         d="M412.7 161.1H259.8C250.2 161.1 242.4 168.9 242.4 178.5V275C242.4 284.6 250.2 292.4 259.8 292.4H268.5L264.9 327L303.1 292.4H412.7C422.3 292.4 430.1 284.6 430.1 275V178.5C430.1 168.9 422.3 161.1 412.7 161.1Z"
         fill="#FF7058"
+      />
+    </svg>
+  );
+};
+
+const UserIcon = () => {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 137 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M68.1953 0C36.3148 0 10.4707 25.8441 10.4707 57.7246V83.9895H125.92V57.7246C125.92 25.8441 100.076 0 68.1953 0Z"
+        fill="#5A4146"
+      />
+      <path
+        opacity="0.1"
+        d="M68.1957 0C64.5977 0 61.0773 0.332031 57.6621 0.962109C84.5121 5.91328 104.853 29.4422 104.853 57.7246V83.9895H125.92V57.7246C125.92 25.8441 100.076 0 68.1957 0Z"
+        fill="black"
+      />
+      <path
+        d="M18.8787 68.8311C11.0494 68.8311 4.70215 75.1783 4.70215 83.0076C4.70215 90.8369 11.0494 97.1842 18.8787 97.1842H25.7728V68.8311H18.8787Z"
+        fill="#E6B273"
+      />
+      <path
+        d="M117.512 68.8311C125.342 68.8311 131.689 75.1783 131.689 83.0076C131.689 90.8369 125.342 97.1842 117.512 97.1842H110.618V68.8311H117.512Z"
+        fill="#E6B273"
+      />
+      <path
+        d="M136.391 200C128.813 181.301 113.768 166.427 94.9531 159.076L94.6555 158.963H41.7348C22.7828 166.273 7.61836 181.204 0 200H136.391Z"
+        fill="#6AB2CC"
+      />
+      <path
+        d="M83.1994 155.591V128.957H53.192V155.592C49.2486 156.411 45.4197 157.542 41.7354 158.963C44.9342 170.577 55.565 179.11 68.1959 179.11C80.8268 179.11 91.4576 170.577 94.6565 158.963C90.9713 157.541 87.1428 156.41 83.1994 155.591Z"
+        fill="#F0C087"
+      />
+      <path
+        opacity="0.1"
+        d="M53.1914 128.957V151.191C57.9977 152.39 63.0227 153.03 68.1953 153.03C73.368 153.03 78.3926 152.39 83.1992 151.191V128.957H53.1914Z"
+        fill="black"
+      />
+      <path
+        d="M103.743 45.6684C98.8348 45.6684 94.8559 41.6895 94.8559 36.7812C94.8559 41.6891 90.877 45.6684 85.9687 45.6684C81.0605 45.6684 77.0816 41.6895 77.0816 36.7812C77.0816 41.6891 73.1027 45.6684 68.1945 45.6684C63.2863 45.6684 59.3074 41.6895 59.3074 36.7812C59.3074 41.6891 55.3285 45.6684 50.4203 45.6684C45.5121 45.6684 41.5332 41.6895 41.5332 36.7812C41.5332 41.6891 37.5543 45.6684 32.6461 45.6684C29.7801 45.6684 27.2387 44.3062 25.6133 42.2004C21.3078 49.1547 18.8203 57.3527 18.8203 66.1332V91.0172C18.8203 118.286 40.9258 140.391 68.1941 140.391C95.4625 140.391 117.568 118.286 117.568 91.0172V66.1332C117.568 57.3527 115.08 49.1547 110.775 42.2004C109.151 44.3059 106.609 45.6684 103.743 45.6684Z"
+        fill="#F0C087"
+      />
+      <path
+        d="M68.1951 114.628C62.4451 114.628 57.3037 113.492 54.4416 111.59C52.9881 110.624 52.5928 108.663 53.5588 107.209C54.5248 105.756 56.4862 105.361 57.9401 106.326C59.424 107.313 63.1705 108.308 68.1955 108.308C73.2201 108.308 76.9666 107.313 78.451 106.327C79.9045 105.361 81.8658 105.756 82.8319 107.21C83.7975 108.663 83.4022 110.625 81.9487 111.591C79.0862 113.492 73.9447 114.628 68.1951 114.628Z"
+        fill="#5A4146"
+      />
+      <path
+        d="M36.3966 75.9629C35.481 75.9629 34.5731 75.5672 33.9481 74.8027C32.8435 73.4516 33.0431 71.4605 34.3942 70.3562C36.863 68.3379 41.2579 67.1328 46.1517 67.1328C51.0454 67.1328 55.4407 68.3379 57.9095 70.3559C59.2606 71.4605 59.4603 73.4516 58.356 74.8027C57.2517 76.1539 55.2603 76.3535 53.9091 75.2492C52.8513 74.3844 49.972 73.4531 46.1517 73.4531C42.3314 73.4531 39.4528 74.384 38.3946 75.2488C37.8083 75.7293 37.0997 75.9629 36.3966 75.9629Z"
+        fill="#5A4146"
+      />
+      <path
+        d="M46.1531 88.8336C49.1393 88.8336 51.5602 86.4128 51.5602 83.4266C51.5602 80.4403 49.1393 78.0195 46.1531 78.0195C43.1669 78.0195 40.7461 80.4403 40.7461 83.4266C40.7461 86.4128 43.1669 88.8336 46.1531 88.8336Z"
+        fill="#353640"
+      />
+      <path
+        d="M99.9937 75.9625C99.2902 75.9625 98.5828 75.7289 97.9953 75.2488C96.9374 74.384 94.0585 73.4531 90.2382 73.4531C86.4179 73.4531 83.5394 74.384 82.4808 75.2492C81.1296 76.3535 79.1386 76.1539 78.0339 74.8027C76.9292 73.4516 77.1292 71.4605 78.4804 70.3559C80.9492 68.3375 85.3445 67.1328 90.2382 67.1328C95.1316 67.1328 99.5273 68.3379 101.996 70.3563C103.347 71.4609 103.546 73.452 102.442 74.8027C101.817 75.5668 100.909 75.9625 99.9937 75.9625Z"
+        fill="#5A4146"
+      />
+      <path
+        d="M90.2391 88.8336C93.2253 88.8336 95.6461 86.4128 95.6461 83.4266C95.6461 80.4403 93.2253 78.0195 90.2391 78.0195C87.2528 78.0195 84.832 80.4403 84.832 83.4266C84.832 86.4128 87.2528 88.8336 90.2391 88.8336Z"
+        fill="#353640"
       />
     </svg>
   );

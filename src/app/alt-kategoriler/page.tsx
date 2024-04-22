@@ -38,13 +38,12 @@ const CalendarPage = () => {
   const fetchData = async () => {
     try {
       const _categories = await GetAllCategoryDatas();
-
-      setCategories(_categories.objecData);
+      setCategories(_categories.objectData);
+      console.log(_categories);
+      
       const _subCategories = await GetAllSubCategoryDatas();
       setSubCategories(_subCategories.objectData);
-
       setResultCategories(_subCategories.objectData);
-
       setLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -214,7 +213,7 @@ const CategoriesTable = ({
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
                     {
-                      categories.find((a) => a.id == packageItem.categoryId)
+                      categories?.find((a) => a.id == packageItem.categoryId)
                         ?.categoryName
                     }
                   </p>

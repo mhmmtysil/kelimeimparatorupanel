@@ -70,7 +70,7 @@ const CalendarPage = () => {
       try {
         const _categories = await GetAllCategoryDatas();
         setLoading(false);
-        setCategories(_categories.objecData);
+        setCategories(_categories.objectData);
         setResultCategories(_categories.objectData);
       } catch (error) {
         console.error("Error fetching categories:", error);

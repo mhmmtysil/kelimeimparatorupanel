@@ -7,43 +7,25 @@ import {
   GetAllLevels,
   GetAllSubCategoryDatas,
   DeleteLevel,
+  GetAllusers,
 } from "@/services/apiService";
 import { Dialog } from "@headlessui/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CardDataStats from "@/components/CardDataStats";
 import Loader from "@/components/common/Loader";
+import { User } from "@/models/User";
+import moment from "moment";
+import "moment/locale/tr";
 
 const CalendarPage = () => {
-  
-  const [mainCategories, setMainCategories] = useState<Category[]>([]);
-  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
-  const [categories, setCategories] = useState<Level[]>([]);
-  const [resultCategories, setResultCategories] = useState<Level[]>([]);
-
-  const [selectedId, setSelectedId] = useState<Level | null>(null);
+  const [users, SetUsers] = useState<User[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [resultModal, setResultModal] = useState(false);
-  const [resultText, setResultText] = useState<any>();
-
   const [loading, setLoading] = useState(true);
 
   const searchParams = useSearchParams();
 
   // Functions
-
-  //@ts-ignore
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.trim().length > 0) {
-      setResultCategories(
-        categories.filter((a) =>
-          a.words.toLowerCase().includes(event.target.value.toLowerCase()),
-        ),
-      );
-    } else {
-      setResultCategories(categories);
-    }
-  };
   function openModal() {
     setIsModalOpen(true);
   }
@@ -51,38 +33,33 @@ const CalendarPage = () => {
   function closeModal() {
     setIsModalOpen(false);
   }
-  function openResultodal() {
-    setResultModal(true);
-  }
 
-  function closeResultModal() {
-    setResultModal(false);
-  }
-
-  async function deleteLevelFromServer(deleteId: number) {
-    if (deleteId != null) {
-      const deleteResult = await DeleteLevel(deleteId);
-      setResultText(deleteResult);
-      openResultodal();
+  //@ts-ignore
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.trim().length > 0) {
+      SetUsers(
+        users.filter(
+          (a) =>
+            a.email.toLowerCase().includes(event.target.value.toLowerCase()) ||
+            (a.firstName + a.lastName)
+              .toLowerCase()
+              .includes(event.target.value.toLowerCase()),
+        ),
+      );
+    } else {
+      SetUsers(users);
     }
-  }
-
+  };
   // Hooks
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const _categories = await GetAllLevels();
-        const _subCategories = await GetAllSubCategoryDatas();
-        const _mainCategories = await GetAllCategoryDatas();
-        setSubCategories(_subCategories.objectData);
-        setCategories(_categories.objectData);
-        setMainCategories(_mainCategories.objectData);
-        setResultCategories(_categories.objectData);
+        const _users = await GetAllusers();
+        if (_users?.objectData) SetUsers(_users.objectData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
-        debugger;
         setLoading(false);
       }
     };
@@ -108,121 +85,15 @@ const CalendarPage = () => {
           </div>
 
           <CardDataStats
-            title="Toplam Seviye"
-            total={subCategories?.length.toString()}
-            rate={subCategories?.filter((a) => a.isActive).length + " adet aktif"}
+            title="Toplam Oyuncu"
+            total={users?.length.toString()}
+            rate={users?.filter((a) => a.isActive).length + " adet aktif"}
             levelUp={false}
-            buttonText="Yeni Bölüm Ekle"
-            href="/yeni-seviye"
           >
             <TotalDataIcon />
           </CardDataStats>
 
-          <CategoriesTable
-            data={resultCategories}
-            openModal={openModal}
-            selectId={setSelectedId}
-            subCategories={subCategories}
-            mainCategories={mainCategories}
-          />
-
-          <Dialog
-            as="div"
-            className="bg-gray-400 fixed fixed inset-0 inset-0 overflow-y-auto"
-            open={isModalOpen}
-            onClose={closeModal}
-          >
-            <div className="min-h-screen px-4 text-center">
-              <Dialog.Overlay className="bg-gray-400 fixed inset-0 opacity-70" />
-
-              <span
-                className="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-
-              <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left text-center align-middle shadow-xl transition-all">
-                <Dialog.Title className="text-gray-900 text-2xl leading-6">
-                  Bu kayıt silinecek.
-                </Dialog.Title>
-                <div className="mt-3">
-                  <p className="text-gray-500 text-sm">
-                    Kategori ID'si : {selectedId?.id}
-                  </p>
-                </div>
-                <div className="mt-3">
-                  <p className="text-gray-500 text-sm">
-                    Kategori Adı : {selectedId?.categoryId}
-                  </p>
-                </div>
-                <Dialog.Description
-                  as="h3"
-                  className="text-gray-900 mt-3 text-lg font-medium leading-6"
-                >
-                  Emin Misin?
-                </Dialog.Description>
-
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => {
-                      if (selectedId?.id != null)
-                        deleteLevelFromServer(selectedId?.id);
-                      setIsModalOpen(false);
-                    }}
-                  >
-                    Evet. Silmek istiyorum
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Dialog>
-
-          {/* Result Modal */}
-          <Dialog
-            as="div"
-            className="bg-gray-400 fixed fixed inset-0 inset-0 overflow-y-auto"
-            open={resultModal}
-            onClose={closeResultModal}
-          >
-            <div className="min-h-screen px-4 text-center">
-              <Dialog.Overlay className="bg-gray-400 fixed inset-0 opacity-70" />
-
-              <span
-                className="inline-block h-screen align-middle"
-                aria-hidden="true"
-              >
-                &#8203;
-              </span>
-
-              <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left text-center align-middle shadow-xl transition-all">
-                <Dialog.Title className="text-gray-900 text-2xl leading-6">
-                  İşlem sonuçlandı.
-                </Dialog.Title>
-                {resultText?.code == "100" ? (
-                  <Dialog.Title className="mt-3 text-2xl leading-8 text-green-500">
-                    {resultText?.objectData?.resultText}
-                  </Dialog.Title>
-                ) : (
-                  <Dialog.Title className="mt-3 text-2xl leading-8 text-danger">
-                    {resultText?.objectData?.resultText}
-                  </Dialog.Title>
-                )}
-
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => closeResultModal()}
-                  >
-                    Kapat
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Dialog>
+          <CategoriesTable users={users} openModal={openModal} />
         </>
       )}
     </DefaultLayout>
@@ -232,20 +103,11 @@ const CalendarPage = () => {
 export default CalendarPage;
 
 interface CategoriesTableProps {
-  mainCategories: Category[];
-  subCategories: SubCategory[];
-  data: Level[];
+  users: User[];
   openModal: (args0: boolean) => void;
-  selectId: (args0: Level) => void;
 }
 
-const CategoriesTable = ({
-  data,
-  openModal,
-  selectId,
-  subCategories,
-  mainCategories,
-}: CategoriesTableProps) => {
+const CategoriesTable = ({ users, openModal }: CategoriesTableProps) => {
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -256,16 +118,22 @@ const CategoriesTable = ({
                 ID
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Harfler
+                E-Mail
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Ana Kategori
+                Kayıt Tarihi
               </th>
               <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
-                Alt Kategori
+                Son Güncelleme
               </th>
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
-                Durum
+                OneSignal ID
+              </th>
+              <th className="px-4 py-4 font-medium text-black dark:text-white">
+                Zümrüt
+              </th>
+              <th className="px-4 py-4 font-medium text-black dark:text-white">
+                Yıldız
               </th>
               <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Düzenle
@@ -273,7 +141,7 @@ const CategoriesTable = ({
             </tr>
           </thead>
           <tbody>
-            {data?.map((packageItem, key) => (
+            {users?.map((packageItem, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
@@ -282,56 +150,46 @@ const CategoriesTable = ({
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {Array.from(packageItem.letters).join(",")}
+                    {packageItem.email == "" ? "-" : packageItem.email}
                   </p>
                 </td>
 
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {
-                      mainCategories.find(
-                        (a) =>
-                          a.id ==
-                          subCategories.find(
-                            (b) => b.id == packageItem.categoryId,
-                          )?.categoryId,
-                      )?.categoryName
-                    }
+                    {moment(packageItem.registerDate.toString()).format(
+                      "DD MMM YYYY HH:mm",
+                    )}
+                  </p>
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {moment(packageItem.lastUpdateDate.toString()).format(
+                      "DD MMM YYYY HH:mm",
+                    )}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {
-                      subCategories.find((a) => a.id == packageItem.categoryId)
-                        ?.title
-                    }
+                    {packageItem.oneSignalID ? packageItem.oneSignalID : "-"}
+                  </p>
+                </td>
+
+                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                  <p className="text-black dark:text-white">
+                    {packageItem.coins}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p
-                    className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
-                      packageItem.isActive
-                        ? "bg-success text-success"
-                        : "bg-danger text-danger"
-                    }`}
-                  >
-                    {packageItem.isActive ? "Aktif" : "Silinmiş"}
+                  <p className="text-black dark:text-white">
+                    {packageItem.stars}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <button
-                      className="hover:text-primary"
-                      onClick={() => {
-                        selectId(packageItem);
-                        openModal(false);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </button>
                     <Link
                       className="hover:text-primary"
-                      href={`/seviye-duzenle?id=${encodeURIComponent(packageItem.id)}&isBonus=${encodeURIComponent(packageItem.isBonus)}&letters=${encodeURIComponent(packageItem.letters)}&additionalLetters=${encodeURIComponent(packageItem.additionalLetters)}&solvedWords=${encodeURIComponent(packageItem.solvedWords)}&words=${encodeURIComponent(packageItem.words)}&additionalWords=${encodeURIComponent(packageItem.additionalWords)}&isActive=${encodeURIComponent(packageItem.isActive)}&isDeleted=${encodeURIComponent(packageItem.isDeleted)}&categoryId=${encodeURIComponent(packageItem.categoryId)}`}
+                      href={`/oyuncu-duzenle?id=${encodeURIComponent(packageItem.id)}`}
                     >
                       <EditIcon />
                     </Link>

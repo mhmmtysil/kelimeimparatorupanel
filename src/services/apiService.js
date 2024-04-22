@@ -147,6 +147,14 @@ export async function GetAllNotifications(accessToken) {
   );
 }
 
+export async function GetAllusers() {
+  return await baseRequesAuth("Auth/GetPanelUsers");
+}
+
+export async function GetPanelUser(user) {
+  return await baseRequesAuth("Auth/GetPanelUser", user);
+}
+
 export async function GetAdvertisementIds() {
   return await baseRequesAuth("Ad/GetAdvertisementIdsPanel");
 }

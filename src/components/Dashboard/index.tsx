@@ -22,7 +22,7 @@ const ECommerce: React.FC = () => {
       const _categories = await GetAllCategoryDatas();
       const _subcategories = await GetAllSubCategoryDatas();
       const _levels = await GetAllLevels();
-      setCategories(_categories.objecData);
+      setCategories(_categories.objectData);
       setSubCategories(_subcategories.objectData);
       setLevels(_levels.objectData);
       setLoading(false);

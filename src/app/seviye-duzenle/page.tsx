@@ -24,7 +24,6 @@ interface Props {
 }
 
 const Page = () => {
-  
   const [categories, setCategories] = useState<SubCategory[]>([]);
   const searchParams = useSearchParams();
   const _selectedId = searchParams.get("id") || 0;
@@ -63,7 +62,7 @@ const Page = () => {
     try {
       const _categories = await GetAllSubCategoryDatas();
 
-      setCategories(_categories.objecData);
+      setCategories(_categories.objectData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -151,12 +150,13 @@ const Page = () => {
       isActive: isActive,
       isDeleted: isDeleted,
     };
+
     var a = await UpdateLevel(level);
     setResultState(a?.code === "100" ? "success" : "error");
     if (a?.code == "100") {
-      setErrorText("Bildirim başarıyla gönderildi. ");
+      setErrorText("Seviye başarıyla güncellendi. ");
     } else {
-      setErrorText("Lütfen Bildirim başlığı ve metnini girin.");
+      setErrorText("Lütfen Tüm alanları kontrol edin.");
     }
     setModalOpen(true);
     setLoading(false);
@@ -250,7 +250,7 @@ const Page = () => {
                     >
                       Kategori Seçiniz.
                     </option>
-                    {categories.map((category, index) => (
+                    {categories?.map((category, index) => (
                       <option
                         key={index}
                         value={category.id}
