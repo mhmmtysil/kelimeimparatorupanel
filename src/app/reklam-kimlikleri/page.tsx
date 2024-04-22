@@ -19,7 +19,7 @@ const CalendarPage = () => {
       try {
         const _ads = await GetAdvertisementIds();
         setLoading(false);
-        setAds(_ads.object);
+        setAds(_ads.objectData);
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoading(false);

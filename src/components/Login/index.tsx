@@ -15,18 +15,17 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState("");
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     var result = await Login({
       email: email,
       password: password,
     });
-
-    if (result.object != null) {
-      localStorage.setItem("user", JSON.stringify(result.object));
+    
+    if (result.objectData != null) {
+      localStorage.setItem("User", JSON.stringify(result.objectData));
       window.location.reload();
-      return result.object;
+      return result.objectData;
     } else {
-      localStorage.setItem("user", "");
+      localStorage.setItem("User", "");
       return null;
     }
   };

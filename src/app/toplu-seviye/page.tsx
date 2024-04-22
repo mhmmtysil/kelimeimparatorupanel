@@ -113,7 +113,7 @@ const Page = () => {
         if (a?.code == "100") {
           setErrorText("Yeni seviyeler başarıyla Eklendi.");
         } else {
-          setErrorText("Hata." + a?.object?.resultText);
+          setErrorText("Hata." + a?.objectData?.resultText);
         }
         setModalOpen(true);
         setLoading(false);

@@ -35,7 +35,7 @@ const Page = () => {
       try {
         const _categories = await GetAllCategoryDatas();
 
-        setCategories(_categories.object);
+        setCategories(_categories.objecData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -61,7 +61,7 @@ const Page = () => {
       if (a?.code == "100") {
         setErrorText("Alt kategori başarıyla eklendi.");
       } else {
-        setErrorText("" + a.object?.resultText);
+        setErrorText("" + a.objectData?.resultText);
       }
     } else {
       setErrorText("Alt kategori bulunamadı.");

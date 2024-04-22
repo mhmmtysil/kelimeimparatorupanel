@@ -70,8 +70,8 @@ const CalendarPage = () => {
       try {
         const _categories = await GetAllCategoryDatas();
         setLoading(false);
-        setCategories(_categories.object);
-        setResultCategories(_categories.object);
+        setCategories(_categories.objecData);
+        setResultCategories(_categories.objectData);
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoading(false);
@@ -192,11 +192,11 @@ const CalendarPage = () => {
                 </Dialog.Title>
                 {resultText?.code == "100" ? (
                   <Dialog.Title className="mt-3 text-2xl leading-8 text-green-500">
-                    {resultText?.object?.resultText}
+                    {resultText?.objectData?.resultText}
                   </Dialog.Title>
                 ) : (
                   <Dialog.Title className="mt-3 text-2xl leading-8 text-danger">
-                    {resultText?.object?.resultText}
+                    {resultText?.objectData?.resultText}
                   </Dialog.Title>
                 )}
 

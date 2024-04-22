@@ -39,11 +39,11 @@ const CalendarPage = () => {
     try {
       const _categories = await GetAllCategoryDatas();
 
-      setCategories(_categories.object);
+      setCategories(_categories.objecData);
       const _subCategories = await GetAllSubCategoryDatas();
-      setSubCategories(_subCategories.object);
+      setSubCategories(_subCategories.objectData);
 
-      setResultCategories(_subCategories.object);
+      setResultCategories(_subCategories.objectData);
 
       setLoading(false);
     } catch (error) {

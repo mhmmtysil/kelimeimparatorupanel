@@ -49,7 +49,7 @@ const Page = () => {
     try {
       const _categories = await GetAllCategoryDatas();
 
-      setCategories(_categories.object);
+      setCategories(_categories.objecData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -78,7 +78,7 @@ const Page = () => {
       } else {
         setResultState("error");
         setErrorText(
-          "Alt Kategori güncellenirken hata oluştu: " + a.object?.resultText,
+          "Alt Kategori güncellenirken hata oluştu: " + a.objectData?.resultText,
         );
       }
       setModalOpen(true);

@@ -31,8 +31,8 @@ const Page = () => {
     try {
       const _notifications = await GetAllNotifications();
       setLoading(false);
-      setNotifications(_notifications.object);
-      console.log(_notifications.object);
+      setNotifications(_notifications.objectData);
+      console.log(_notifications.objectData);
     } catch (error) {
       console.error("Error fetching notifications:", error);
       setLoading(false);

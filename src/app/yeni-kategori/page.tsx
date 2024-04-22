@@ -48,7 +48,7 @@ const Page = () => {
       if (a?.code == "100") {
         setErrorText("Yeni Kategori başarıyla eklendi.");
       } else {
-        setErrorText("Kategori eklenirken hata oluştu: " + a.object.resultText);
+        setErrorText("Kategori eklenirken hata oluştu: " + a.objectData.resultText);
       }
     } else {
       setResultState("error");

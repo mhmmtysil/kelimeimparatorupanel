@@ -41,7 +41,7 @@ const Page = () => {
     try {
       const _categories = await GetAllSubCategoryDatas();
 
-      setCategories(_categories.object);
+      setCategories(_categories.objectData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -50,7 +50,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, []);
 
   const changeTextColor = () => {
@@ -126,7 +126,7 @@ const Page = () => {
     if (a?.code == "100") {
       setErrorText("Yeni seviye başarıyla Eklendi.");
     } else {
-      setErrorText("Hata." + a?.object?.resultText);
+      setErrorText("Hata." + a?.objectData?.resultText);
     }
     setModalOpen(true);
     setLoading(false);

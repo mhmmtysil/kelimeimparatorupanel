@@ -1,3 +1,4 @@
+"use client"
 import Layout from "./layout";
 
 function Page404() {

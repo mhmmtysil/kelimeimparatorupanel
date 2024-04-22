@@ -54,7 +54,7 @@ const Page = () => {
       } else {
         setResultState("error");
         setErrorText(
-          "Kategori güncellenirken hata oluştu: " + a.object?.resultText,
+          "Kategori güncellenirken hata oluştu: " + a.objectData?.resultText,
         );
       }
       setModalOpen(true);

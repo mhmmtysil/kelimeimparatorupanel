@@ -1,8 +1,6 @@
 "use client";
-import Calendar from "@/components/Calender";
-import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Category, Level, SubCategory } from "@/models/Category";
 import {
   GetAllCategoryDatas,
@@ -15,7 +13,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CardDataStats from "@/components/CardDataStats";
 import Loader from "@/components/common/Loader";
-import { useSession } from "next-auth/react";
 
 const CalendarPage = () => {
   
@@ -78,13 +75,14 @@ const CalendarPage = () => {
         const _categories = await GetAllLevels();
         const _subCategories = await GetAllSubCategoryDatas();
         const _mainCategories = await GetAllCategoryDatas();
-        setSubCategories(_subCategories.object);
-        setCategories(_categories.object);
-        setMainCategories(_mainCategories.object);
-        setResultCategories(_categories.object);
+        setSubCategories(_subCategories.objectData);
+        setCategories(_categories.objecData);
+        setMainCategories(_mainCategories.objectData);
+        setResultCategories(_categories.objectData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        debugger;
         setLoading(false);
       }
     };
@@ -205,11 +203,11 @@ const CalendarPage = () => {
                 </Dialog.Title>
                 {resultText?.code == "100" ? (
                   <Dialog.Title className="mt-3 text-2xl leading-8 text-green-500">
-                    {resultText?.object?.resultText}
+                    {resultText?.objectData?.resultText}
                   </Dialog.Title>
                 ) : (
                   <Dialog.Title className="mt-3 text-2xl leading-8 text-danger">
-                    {resultText?.object?.resultText}
+                    {resultText?.objectData?.resultText}
                   </Dialog.Title>
                 )}
 

@@ -22,9 +22,9 @@ const ECommerce: React.FC = () => {
       const _categories = await GetAllCategoryDatas();
       const _subcategories = await GetAllSubCategoryDatas();
       const _levels = await GetAllLevels();
-      setCategories(_categories.object);
-      setSubCategories(_subcategories.object);
-      setLevels(_levels.object);
+      setCategories(_categories.objecData);
+      setSubCategories(_subcategories.objectData);
+      setLevels(_levels.objectData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);

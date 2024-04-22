@@ -63,7 +63,7 @@ const Page = () => {
     try {
       const _categories = await GetAllSubCategoryDatas();
 
-      setCategories(_categories.object);
+      setCategories(_categories.objecData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching categories:", error);
